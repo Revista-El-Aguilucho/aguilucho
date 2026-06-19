@@ -30,7 +30,7 @@ const REVISTA = {
   email:           "elaguilucho@gimnasiomoderno.edu.co",
   direccion:       "Carrera 9ª #74-99, Bogotá, Colombia",
   archivoUrl:      "https://gimnasiomoderno.edu.co/medios/revistas/elaguilucho/",
-  tituloTab:       "El Aguilucho · Gimnasio Moderno · Bogotá",  // ← Cambia el título de la pestaña del navegador
+  tituloTab:       "El Aguilucho",  // ← Cambia el título de la pestaña del navegador
   copyright:       `© ${new Date().getFullYear()} El Aguilucho · Gimnasio Moderno · Todos los derechos reservados`,
 };
 
