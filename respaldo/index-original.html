@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>El Aguilucho · Gimnasio Moderno · Bogotá</title>
+  <meta name="description" content="El Aguilucho es la revista estudiantil más antigua de América Latina, fundada en 1927 en el Gimnasio Moderno de Bogotá, Colombia." />
+  <meta property="og:title" content="El Aguilucho · Gimnasio Moderno" />
+  <meta property="og:description" content="La publicación estudiantil más antigua de América Latina. Desde 1927." />
+  <meta property="og:image" content="images/portada.jpg" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="images/logo.svg" />
+  <link rel="icon" type="image/png" href="images/logo.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet" />
+
+  <!-- datos.js carga primero para que el JS inline pueda leerlos -->
+  <script src="datos.js"></script>
+
+  <style>
+    /* ── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --negro:      #111111;
+      --gris-oscuro:#333333;
+      --gris-medio: #666666;
+      --gris-claro: #767676; /* corregido: contraste 4.54:1 sobre blanco */
+      --gris-linea: #DDDDDD;
+      --gris-fondo: #F5F4F0;
+      --blanco:     #FFFFFF;
+      --crema:      #FAF9F6;
+
+      --serif-titulo: 'Playfair Display', Georgia, serif;
+      --serif-cuerpo: 'Source Serif 4', Georgia, serif;
+      --sans:         'Helvetica Neue', Arial, sans-serif;
+
+      --max-ancho:        1120px;
+      --padding-seccion:  5rem 1.5rem;
+      --transicion:       0.25s ease;
+    }
+
+    /* ── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body  { font-family: var(--serif-cuerpo); color: var(--negro); background: var(--blanco); line-height: 1.75; }
+    img   { display: block; max-width: 100%; height: auto; }
+    a     { color: inherit; text-decoration: none; }
+    p     { margin-bottom: 1.2em; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── SCROLL SUAVE (respeta prefers-reduced-motion) ───────── */
+    @media (prefers-reduced-motion: no-preference) {
+      html { scroll-behavior: smooth; }
+    }
+
+    /* ── UTILIDADES ─────────────────────────────────────────── */
+    .contenedor {
+      max-width: var(--max-ancho);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    .etiqueta-seccion {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── ANIMACIONES DE SCROLL ───────────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up[data-delay="1"] { transition-delay: 0.10s; }
+    .fade-up[data-delay="2"] { transition-delay: 0.20s; }
+    .fade-up[data-delay="3"] { transition-delay: 0.30s; }
+    .fade-up[data-delay="4"] { transition-delay: 0.40s; }
+    .fade-up[data-delay="5"] { transition-delay: 0.50s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-up { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* ── FOCUS VISIBLE ───────────────────────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--negro);
+      outline-offset: 3px;
+    }
+
+    /* ── ENCABEZADO ─────────────────────────────────────────── */
+    #encabezado {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid var(--negro);
+      transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
+    }
+    #encabezado.scrolled {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 1px 24px rgba(0, 0, 0, 0.08);
+    }
+    .encabezado-interior {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 1.5rem;
+      max-width: var(--max-ancho);
+      margin: 0 auto;
+    }
+    .logo-marca { display: flex; flex-direction: column; line-height: 1.15; }
+    .logo-nombre {
+      font-family: var(--serif-titulo);
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .logo-subtitulo {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+    }
+    .nav-principal { display: flex; gap: 2rem; list-style: none; }
+    .nav-principal a {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gris-oscuro);
+      padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
+      transition: border-color var(--transicion), color var(--transicion);
+    }
+    .nav-principal a:hover,
+    .nav-principal a.activo {
+      color: var(--negro);
+      border-bottom-color: var(--negro);
+    }
+    .btn-menu {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .btn-menu span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--negro);
+      transition: transform 0.3s;
+    }
+    .nav-movil { display: none; border-top: 1px solid var(--gris-linea); }
+    .nav-movil.abierto { display: block; }
+    .nav-movil ul { list-style: none; padding: 1rem 1.5rem; }
+    .nav-movil ul li a {
+      display: block;
+      padding: 0.6rem 0;
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gris-oscuro);
+      border-bottom: 1px solid var(--gris-linea);
+    }
+
+    /* ── HERO ───────────────────────────────────────────────── */
+    #inicio {
+      position: relative;
+      height: 92vh;
+      min-height: 520px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .hero-imagen {
+      position: absolute;
+      inset: 0;
+      background-image: url('images/hero.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+    .hero-imagen::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.12) 100%);
+    }
+
+    /* Águila SVG en el hero */
+    .hero-eagle {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hero-eagle svg {
+      width: min(72vw, 640px);
+      height: auto;
+      fill: white;
+      opacity: 0;
+      transform: scale(0.93);
+      animation: eagleEntrada 1.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+    }
+    @keyframes eagleEntrada {
+      to { opacity: 0.07; transform: scale(1); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-eagle svg { animation: none; opacity: 0.07; transform: scale(1); }
+    }
+
+    .hero-contenido {
+      position: relative;
+      z-index: 2;
+      padding: 3.5rem 1.5rem;
+      max-width: var(--max-ancho);
+      width: 100%;
+      margin: 0 auto;
+    }
+    .hero-etiqueta {
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeSlideUp 0.9s ease 0.8s forwards;
+    }
+    .hero-titulo {
+      font-family: var(--serif-titulo);
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      font-weight: 700;
+      color: var(--blanco);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+      max-width: 16ch;
+      opacity: 0;
+      animation: fadeSlideUp 0.9s ease 1.0s forwards;
+    }
+    .hero-subtitulo {
+      font-family: var(--serif-titulo);
+      font-size: 1.1rem;
+      font-style: italic;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.05em;
+      opacity: 0;
+      animation: fadeSlideUp 0.9s ease 1.2s forwards;
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-etiqueta, .hero-titulo, .hero-subtitulo {
+        animation: none; opacity: 1; transform: none;
+      }
+    }
+
+    /* ── EDICIÓN ACTUAL ─────────────────────────────────────── */
+    #edicion-actual {
+      border-bottom: 1px solid var(--gris-linea);
+      overflow: hidden;
+    }
+    .grid-edicion-actual {
+      display: grid;
+      grid-template-columns: 42% 58%;
+      gap: 0;
+      align-items: stretch;
+      min-height: 580px;
+    }
+    /* Panel izquierdo — negro, portada flotante */
+    .edicion-portada-col {
+      background: var(--negro);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5rem 3.5rem;
+      position: relative;
+      gap: 1.5rem;
+    }
+    .edicion-portada-col img {
+      max-width: 260px;
+      width: 100%;
+      height: auto;
+      display: block;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.55);
+      transition: transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s ease;
+    }
+    .edicion-portada-col a {
+      display: block;
+      cursor: pointer;
+    }
+    .edicion-portada-col a:hover img {
+      transform: translateY(-12px) scale(1.015);
+      box-shadow: 0 52px 80px rgba(0,0,0,0.65);
+    }
+    .edicion-portada-sello {
+      font-family: var(--sans);
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+    }
+    /* Panel derecho — claro, info editorial */
+    .edicion-info-col {
+      background: var(--gris-fondo);
+      display: flex;
+      align-items: center;
+    }
+    .edicion-info-inner {
+      padding: 5rem 4rem 5rem 4rem;
+      max-width: 540px;
+    }
+    .edicion-info-inner h2 {
+      font-family: var(--serif-titulo);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .edicion-intro { font-size: 1.05rem; color: var(--gris-oscuro); }
+    .edicion-precio-bloque {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--gris-linea);
+      margin-top: 1.5rem;
+    }
+    .edicion-precio {
+      font-family: var(--serif-titulo);
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .edicion-precio-label {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+      display: block;
+      margin-bottom: 0.15rem;
+    }
+    .btn-comprar {
+      display: inline-block;
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--blanco);
+      background: var(--negro);
+      border: 1.5px solid var(--negro);
+      padding: 0.75rem 1.6rem;
+      transition: background var(--transicion), color var(--transicion);
+      white-space: nowrap;
+    }
+    .btn-comprar:hover { background: var(--blanco); color: var(--negro); }
+
+    /* ── ANUNCIOS ────────────────────────────────────────────── */
+    #anuncios { background: var(--blanco); border-bottom: 1px solid var(--gris-linea); }
+    .grid-anuncios { display: grid; grid-template-columns: 1fr 1fr; }
+    .anuncio-item { display: block; overflow: hidden; }
+    .anuncio-imagen {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: grayscale(100%);
+      transition: filter 0.4s ease, transform 0.4s ease;
+    }
+    .anuncio-item:hover .anuncio-imagen {
+      filter: grayscale(0%);
+      transform: scale(1.015);
+    }
+
+    /* ── EL AGUILUCHO ────────────────────────────────────────── */
+    #el-aguilucho {
+      padding: var(--padding-seccion);
+      background: var(--blanco);
+      border-bottom: 1px solid var(--gris-linea);
+    }
+    .grid-historia {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .historia-texto h2 {
+      font-family: var(--serif-titulo);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .historia-texto p { font-size: 1.05rem; color: var(--gris-oscuro); }
+    .historia-imagen { position: relative; }
+    .historia-imagen img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+    .historia-imagen figcaption {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      color: var(--gris-medio);
+      letter-spacing: 0.05em;
+      margin-top: 0.6rem;
+      font-style: italic;
+    }
+    blockquote {
+      border-left: 3px solid var(--negro);
+      padding: 0.5rem 0 0.5rem 1.5rem;
+      margin: 2rem 0;
+    }
+    blockquote p {
+      font-family: var(--serif-titulo);
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--gris-oscuro);
+    }
+    blockquote footer cite {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gris-claro);
+      font-style: normal;
+    }
+
+    /* ── ESTADÍSTICAS ────────────────────────────────────────── */
+    #estadisticas {
+      padding: 5rem 1.5rem;
+      background: var(--negro);
+      color: var(--blanco);
+      border-bottom: 1px solid #222;
+      overflow: hidden;
+    }
+    .stats-grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+    .stat-bloque {
+      text-align: center;
+      padding: 0 4rem;
+      flex: 1;
+      min-width: 160px;
+    }
+    .stat-bloque + .stat-bloque {
+      border-left: 1px solid rgba(255,255,255,0.15);
+    }
+    .stat-numero {
+      font-family: var(--serif-titulo);
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-weight: 700;
+      color: var(--blanco);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      display: block;
+    }
+    .stat-label {
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-top: 0.6rem;
+      display: block;
+    }
+    .stat-claim {
+      text-align: center;
+      font-family: var(--serif-titulo);
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-style: italic;
+      color: rgba(255,255,255,0.55);
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      max-width: 55ch;
+      margin: 0 auto;
+    }
+
+    /* ── LA PLUMA ────────────────────────────────────────────── */
+    #la-pluma {
+      padding: var(--padding-seccion);
+      background: var(--crema);
+      border-bottom: 1px solid var(--gris-linea);
+    }
+    #la-pluma h2 {
+      font-family: var(--serif-titulo);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .pluma-intro {
+      font-size: 1rem;
+      color: var(--gris-medio);
+      max-width: none;
+      margin-bottom: 3rem;
+    }
+    /* Edición destacada de La Pluma */
+    .pluma-destacada {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      background: var(--blanco);
+      border: 1px solid var(--gris-linea);
+      margin-bottom: 2rem;
+      transition: box-shadow 0.3s ease;
+      overflow: hidden;
+    }
+    .pluma-destacada:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+    .pluma-destacada-texto {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2.5rem;
+    }
+    .pluma-numero-grande {
+      flex: 1;
+      font-family: var(--serif-titulo);
+      font-size: clamp(4rem, 10vw, 8rem);
+      font-weight: 700;
+      color: var(--negro);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid var(--gris-linea);
+      padding: 2.5rem;
+    }
+    /* Compensa la métrica de Playfair: el glifo se asienta bajo
+       por el espacio reservado para descendentes. Lo subimos ópticamente. */
+    .pluma-numero-grande > span {
+      display: block;
+      transform: translateY(-0.15em);
+    }
+    .pluma-edicion-label {
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+      margin-bottom: 0.75rem;
+    }
+    .pluma-titulo {
+      font-family: var(--serif-titulo);
+      font-size: clamp(1rem, 1.8vw, 1.25rem);
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 1rem;
+    }
+    .pluma-descripcion {
+      font-size: 0.95rem;
+      color: var(--gris-oscuro);
+      margin-bottom: 1.5rem;
+    }
+    /* Grid de ediciones anteriores de La Pluma */
+    .pluma-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .pluma-card {
+      border-top: 2px solid var(--negro);
+      padding-top: 1.2rem;
+      transition: opacity 0.2s;
+    }
+    .pluma-card:hover { opacity: 0.75; }
+    .pluma-card-num {
+      font-family: var(--serif-titulo);
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .pluma-card-mes {
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+      margin-bottom: 1rem;
+    }
+    .btn-leer-pluma {
+      display: inline-block;
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--negro);
+      border-bottom: 1px solid var(--negro);
+      padding-bottom: 2px;
+      transition: color var(--transicion), border-color var(--transicion);
+    }
+    .btn-leer-pluma:hover { color: var(--gris-medio); border-bottom-color: var(--gris-medio); }
+
+    /* Ediciones ocultas de La Pluma (opción B) */
+    .pluma-ocultas {
+      display: none;
+    }
+    .pluma-ocultas.visible-grid {
+      display: grid;
+    }
+    .btn-ver-todas {
+      display: inline-block;
+      margin-top: 2rem;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--negro);
+      background: transparent;
+      border: 1.5px solid var(--negro);
+      padding: 0.75rem 1.6rem;
+      cursor: pointer;
+      transition: background var(--transicion), color var(--transicion);
+    }
+    .btn-ver-todas:hover { background: var(--negro); color: var(--blanco); }
+
+    /* ── REVISTAS / ARCHIVO ──────────────────────────────────── */
+    #revistas {
+      padding: var(--padding-seccion);
+      background: var(--blanco);
+      border-bottom: 1px solid var(--gris-linea);
+    }
+    #revistas h2 {
+      font-family: var(--serif-titulo);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    #revistas .seccion-intro {
+      font-size: 1rem;
+      color: var(--gris-medio);
+      margin-bottom: 2rem;
+    }
+
+    /* Filtro por décadas */
+    .decadas-filtro {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+    .decada-btn {
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: 1px solid var(--gris-linea);
+      background: transparent;
+      color: var(--gris-medio);
+      padding: 0.45rem 0.9rem;
+      cursor: pointer;
+      transition: background var(--transicion), color var(--transicion), border-color var(--transicion);
+    }
+    .decada-btn:hover  { border-color: var(--negro); color: var(--negro); }
+    .decada-btn.activo { background: var(--negro); color: var(--blanco); border-color: var(--negro); }
+
+    /* Grid de tarjetas de edición.
+       Técnica: el contenedor tiene fondo negro y un gap de 1px.
+       Las tarjetas son blancas y el gap deja ver el fondo negro
+       como si fueran líneas divisorias. Nunca hay bordes dobles
+       ni faltantes, sin importar cuántas tarjetas haya. */
+    .grid-ediciones {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      background: var(--negro);
+      border: 1px solid var(--negro);
+      margin-bottom: 2.5rem;
+      min-height: 160px;
+    }
+    .tarjeta-edicion {
+      padding: 2rem 1.4rem;
+      background: var(--blanco);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: background var(--transicion), opacity 0.3s ease, transform 0.3s ease;
+    }
+    .tarjeta-edicion:hover { background: var(--gris-fondo); }
+    .tarjeta-edicion.saliendo { opacity: 0; transform: translateY(8px); }
+    .tarjeta-edicion.entrando { animation: cardEntrada 0.4s ease forwards; }
+    @keyframes cardEntrada {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .tarjeta-edicion-numero {
+      font-family: var(--serif-titulo);
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .tarjeta-edicion-anio {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+    }
+    .tarjeta-edicion-sep {
+      width: 2rem;
+      height: 1px;
+      background: var(--gris-linea);
+      margin: 0.5rem 0;
+    }
+    .tarjeta-edicion-btn {
+      display: inline-block;
+      margin-top: auto;
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--negro);
+      border-bottom: 1px solid var(--negro);
+      padding-bottom: 2px;
+      align-self: flex-start;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tarjeta-edicion-btn:hover { color: var(--gris-medio); border-bottom-color: var(--gris-medio); }
+
+    /* Banner archivo histórico */
+    .banner-archivo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.8rem 2rem;
+      border: 1px solid var(--negro);
+      text-decoration: none;
+      transition: background var(--transicion);
+      gap: 1rem;
+    }
+    .banner-archivo:hover { background: var(--negro); }
+    .banner-archivo:hover .banner-archivo-titulo,
+    .banner-archivo:hover .banner-archivo-subtitulo,
+    .banner-archivo:hover .banner-archivo-flecha { color: var(--blanco); }
+    .banner-archivo-titulo {
+      font-family: var(--serif-titulo);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--negro);
+      transition: color var(--transicion);
+    }
+    .banner-archivo-subtitulo {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+      margin-top: 0.2rem;
+      transition: color var(--transicion);
+    }
+    .banner-archivo-flecha {
+      font-family: var(--serif-titulo);
+      font-size: 1.4rem;
+      color: var(--negro);
+      flex-shrink: 0;
+      transition: color var(--transicion);
+    }
+
+    /* ── PRESIDENTES ─────────────────────────────────────────── */
+    #presidentes {
+      padding: var(--padding-seccion);
+      background: var(--gris-fondo);
+      border-bottom: 1px solid var(--gris-linea);
+    }
+    #presidentes h2 {
+      font-family: var(--serif-titulo);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    #presidentes .seccion-intro {
+      font-size: 1rem;
+      color: var(--gris-medio);
+      margin-bottom: 3rem;
+    }
+    .grid-presidentes {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2rem;
+    }
+    .tarjeta-presidente { text-align: center; }
+    .presidente-foto {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      filter: grayscale(100%);
+      margin: 0 auto 1rem;
+      border: 2px solid var(--gris-linea);
+      background: var(--gris-linea);
+      transition: filter 0.4s ease, transform 0.4s ease;
+    }
+    .tarjeta-presidente:hover .presidente-foto {
+      filter: grayscale(0%);
+      transform: scale(1.04);
+    }
+    .presidente-nombre {
+      font-family: var(--serif-titulo);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    .presidente-cargo {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      color: var(--gris-medio);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .presidente-periodo {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      color: var(--gris-claro);
+      margin-top: 0.2rem;
+    }
+
+    /* Equipo */
+    .equipo-encabezado {
+      margin-top: 4rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--gris-linea);
+      margin-bottom: 2rem;
+    }
+    .equipo-encabezado h3 {
+      font-family: var(--serif-titulo);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .equipo-encabezado p { font-size: 0.95rem; color: var(--gris-medio); }
+    .grid-equipo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--gris-linea);
+    }
+    .entrada-equipo {
+      padding: 1.1rem 1.4rem;
+      border-bottom: 1px solid var(--gris-linea);
+      border-right: 1px solid var(--gris-linea);
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      transition: background 0.15s;
+    }
+    .entrada-equipo:hover { background: var(--blanco); }
+    .entrada-equipo:nth-child(2n)     { border-right: none; }
+    .entrada-equipo:nth-last-child(-n+2) { border-bottom: none; }
+    .entrada-equipo:last-child        { border-bottom: none; }
+    .entrada-equipo-nombre {
+      font-family: var(--serif-titulo);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--negro);
+    }
+    .entrada-equipo-cargo {
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+    }
+
+    /* ── CONTACTO ────────────────────────────────────────────── */
+    #contacto {
+      padding: var(--padding-seccion);
+      background: var(--negro);
+      color: var(--blanco);
+    }
+    #contacto .etiqueta-seccion { color: rgba(255,255,255,0.45); }
+    #contacto h2 {
+      font-family: var(--serif-titulo);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--blanco);
+    }
+    #contacto .seccion-intro {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.65);
+      max-width: 50ch;
+      margin-bottom: 3rem;
+    }
+    .grid-contacto {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.15);
+    }
+    .contacto-bloque h3 {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 1rem;
+    }
+    .contacto-bloque p,
+    .contacto-bloque address {
+      font-family: var(--serif-cuerpo);
+      font-style: normal;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.7;
+    }
+    .contacto-instagram {
+      font-family: var(--serif-titulo);
+      font-size: 1.6rem;
+      font-weight: 600;
+      font-style: italic;
+      color: var(--blanco);
+      display: block;
+      margin-bottom: 0.5rem;
+      transition: opacity 0.2s;
+    }
+    .contacto-instagram:hover { opacity: 0.7; }
+    .red-link {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding-bottom: 2px;
+      transition: color var(--transicion), border-color var(--transicion);
+    }
+    .red-link:hover { color: var(--blanco); border-bottom-color: var(--blanco); }
+    .contacto-email-link {
+      color: rgba(255,255,255,0.7);
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      transition: color var(--transicion);
+    }
+    .contacto-email-link:hover { color: var(--blanco); }
+
+    /* ── FOOTER ──────────────────────────────────────────────── */
+    #pie {
+      background: var(--negro);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding: 3rem 1.5rem 2rem;
+      color: rgba(255,255,255,0.55);
+    }
+    .pie-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+      gap: 2.5rem;
+      max-width: var(--max-ancho);
+      margin: 0 auto 2.5rem;
+    }
+    .pie-columna h4 {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 1rem;
+    }
+    .pie-columna ul { list-style: none; }
+    .pie-columna ul li { margin-bottom: 0.4rem; }
+    .pie-columna ul li a {
+      font-family: var(--serif-cuerpo);
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.55);
+      transition: color var(--transicion);
+    }
+    .pie-columna ul li a:hover { color: var(--blanco); }
+    .pie-columna p {
+      font-family: var(--serif-cuerpo);
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+    }
+    .pie-logo-nombre {
+      font-size: 1.2rem;
+      font-family: var(--serif-titulo);
+      font-weight: 700;
+      color: var(--blanco);
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+    .pie-bottom {
+      max-width: var(--max-ancho);
+      margin: 0 auto;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .pie-bottom p {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.3);
+    }
+    .pie-redes { display: flex; gap: 1.2rem; }
+    .pie-redes a {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      transition: color var(--transicion);
+    }
+    .pie-redes a:hover { color: var(--blanco); }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .grid-edicion-actual    { grid-template-columns: 1fr; min-height: auto; }
+      .edicion-portada-col    { padding: 3.5rem 2rem; min-height: 380px; }
+      .edicion-info-col       { justify-content: flex-start; }
+      .edicion-info-inner     { padding: 3rem 2rem; max-width: none; }
+      .grid-historia          { grid-template-columns: 1fr; }
+      .historia-imagen        { order: -1; }
+      .grid-ediciones         { grid-template-columns: repeat(3, 1fr); }
+      /* Tarjeta sola en última fila → centrada */
+      .grid-ediciones .tarjeta-edicion:last-child:nth-child(3n-2) {
+        grid-column: 1 / -1;
+        align-items: center;
+        text-align: center;
+      }
+      .grid-ediciones .tarjeta-edicion:last-child:nth-child(3n-1) {
+        grid-column: 2 / -1;
+        align-items: center;
+        text-align: center;
+      }
+      .pluma-destacada        { flex-direction: column; }
+      .pluma-numero-grande    { border-right: none; border-bottom: 1px solid var(--gris-linea); padding: 2rem; min-height: 120px; }
+      .pie-grid               { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      :root { --padding-seccion: 3.5rem 1rem; }
+      .encabezado-interior    { padding: 0.75rem 1rem; }
+      .nav-principal          { display: none; }
+      .btn-menu               { display: flex; }
+      .hero-titulo            { font-size: 2.4rem; }
+      .grid-anuncios          { grid-template-columns: 1fr; }
+      .grid-ediciones         { grid-template-columns: 1fr 1fr; }
+      /* La técnica gap+fondo negro dibuja todas las líneas sola.
+         Solo centramos la tarjeta que queda sola en la última fila. */
+      .grid-ediciones .tarjeta-edicion:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+        align-items: center;
+        text-align: center;
+      }
+      .grid-ediciones .tarjeta-edicion:last-child:nth-child(odd) .tarjeta-edicion-sep {
+        margin-left: auto; margin-right: auto;
+      }
+      .grid-ediciones .tarjeta-edicion:last-child:nth-child(odd) .tarjeta-edicion-btn {
+        align-self: center;
+      }
+      .grid-presidentes       { grid-template-columns: repeat(3, 1fr); }
+      .pluma-grid             { grid-template-columns: 1fr 1fr; }
+      .grid-contacto          { grid-template-columns: 1fr; }
+      .pie-grid               { grid-template-columns: 1fr; }
+      .stat-bloque            { padding: 1.5rem 2rem; }
+      .stat-bloque + .stat-bloque { border-left: none; border-top: 1px solid rgba(255,255,255,0.15); }
+      .stats-grid             { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ ENCABEZADO ══════════════════════════════════════════ -->
+  <header id="encabezado">
+    <div class="encabezado-interior">
+      <a href="#inicio" class="logo-marca">
+        <span class="logo-nombre">El Aguilucho</span>
+        <span class="logo-subtitulo">Gimnasio Moderno · Bogotá</span>
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul class="nav-principal">
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#edicion-actual">Edición Actual</a></li>
+          <li><a href="#el-aguilucho">El Aguilucho</a></li>
+          <li><a href="#la-pluma">La Pluma</a></li>
+          <li><a href="#revistas">Revistas</a></li>
+          <li><a href="#presidentes">Presidentes</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+      <button class="btn-menu" id="btnMenu" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="nav-movil" id="navMovil" aria-label="Menú móvil">
+      <ul>
+        <li><a href="#inicio"         class="nav-link-movil">Inicio</a></li>
+        <li><a href="#edicion-actual" class="nav-link-movil">Edición Actual</a></li>
+        <li><a href="#el-aguilucho"   class="nav-link-movil">El Aguilucho</a></li>
+        <li><a href="#la-pluma"       class="nav-link-movil">La Pluma</a></li>
+        <li><a href="#revistas"       class="nav-link-movil">Revistas</a></li>
+        <li><a href="#presidentes"    class="nav-link-movil">Presidentes</a></li>
+        <li><a href="#contacto"       class="nav-link-movil">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+
+  <!-- ══ INICIO / HERO ═══════════════════════════════════════ -->
+  <section id="inicio">
+    <div class="hero-imagen" role="img" aria-label="Imagen principal El Aguilucho"></div>
+
+    <!-- Águila SVG como elemento de fondo del hero -->
+    <div class="hero-eagle" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 223.459139 135.550924" preserveAspectRatio="xMidYMid meet">
+        <g transform="translate(-4.000000,141.791129) scale(0.100000,-0.100000)">
+          <path d="M40 1416 c0 -13 13 -24 350 -297 124 -100 239 -194 257 -209 28 -25 152 -232 421 -705 43 -76 84 -141 90 -143 9 -3 88 121 172 273 19 33 61 105 94 160 33 55 65 109 71 120 6 11 43 74 83 141 62 105 82 129 149 185 43 35 155 127 248 204 94 77 200 164 238 194 37 29 64 57 61 62 -3 5 -8 7 -12 5 -4 -2 -104 -44 -222 -94 -118 -49 -281 -118 -362 -152 l-147 -62 -167 -262 c-92 -143 -175 -270 -185 -281 -17 -17 -21 -18 -33 -5 -18 18 -303 448 -337 507 -13 24 -27 43 -31 43 -6 0 -342 149 -478 212 -173 80 -260 115 -260 104z"/>
+          <path d="M106 1228 c8 -13 74 -105 203 -280 57 -78 74 -93 178 -160 141 -91 193 -121 198 -117 2 2 -20 43 -48 91 -55 92 -54 91 -404 384 -101 86 -147 115 -127 82z"/>
+          <path d="M2185 1220 c-11 -9 -105 -88 -210 -175 -223 -185 -252 -212 -269 -245 -6 -14 -25 -46 -40 -72 -17 -30 -23 -48 -15 -48 6 0 68 35 137 77 114 71 131 86 196 168 78 98 218 282 230 303 10 17 -6 13 -29 -8z"/>
+          <path d="M1057 976 c-46 -17 -43 -13 -50 -57 -4 -29 -2 -37 16 -45 19 -8 22 -17 22 -74 0 -62 3 -70 55 -152 30 -49 57 -88 60 -88 3 0 31 42 63 92 l57 93 0 107 c0 101 -1 108 -22 119 -35 19 -157 22 -201 5z"/>
+          <path d="M440 746 c0 -3 35 -38 77 -78 42 -40 120 -114 172 -164 208 -197 218 -200 125 -34 l-57 100 -121 69 c-66 38 -138 79 -158 91 -21 12 -38 19 -38 16z"/>
+          <path d="M1790 699 c-41 -27 -107 -68 -146 -90 -67 -39 -73 -46 -130 -142 -68 -116 -70 -121 -56 -116 15 6 422 383 422 391 0 14 -13 7 -90 -43z"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="hero-contenido">
+      <p class="hero-etiqueta">Gimnasio Moderno · Bogotá, Colombia</p>
+      <h1 class="hero-titulo">La voz del Gimnasio Moderno</h1>
+      <p class="hero-subtitulo">1927 – presente</p>
+    </div>
+  </section>
+
+
+  <!-- ══ EDICIÓN ACTUAL ══════════════════════════════════════ -->
+  <section id="edicion-actual">
+    <div id="render-edicion-actual" class="grid-edicion-actual"></div>
+  </section>
+
+
+  <!-- ══ ANUNCIOS ════════════════════════════════════════════ -->
+  <section id="anuncios">
+    <div id="render-anuncios" class="grid-anuncios"></div>
+  </section>
+
+
+  <!-- ══ EL AGUILUCHO ════════════════════════════════════════ -->
+  <section id="el-aguilucho">
+    <div class="contenedor">
+      <div id="render-historia" class="grid-historia"></div>
+    </div>
+  </section>
+
+
+  <!-- ══ ESTADÍSTICAS ════════════════════════════════════════ -->
+  <section id="estadisticas" aria-label="Estadísticas de la revista">
+    <div class="contenedor">
+      <div class="stats-grid">
+        <div class="stat-bloque fade-up">
+          <span class="stat-numero" data-target="99" aria-label="99 años">0</span>
+          <span class="stat-label">años de historia</span>
+        </div>
+        <div class="stat-bloque fade-up" data-delay="2">
+          <span class="stat-numero" data-target="256" aria-label="256 ediciones">0</span>
+          <span class="stat-label">ediciones publicadas</span>
+        </div>
+        <div class="stat-bloque fade-up" data-delay="4">
+          <span class="stat-numero" style="font-size:clamp(2.5rem,5vw,4.5rem);">1927</span>
+          <span class="stat-label">año de fundación</span>
+        </div>
+      </div>
+      <p class="stat-claim fade-up" data-delay="3">
+        La publicación estudiantil más antigua de América Latina
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ══ LA PLUMA ════════════════════════════════════════════ -->
+  <section id="la-pluma">
+    <div class="contenedor">
+      <p class="etiqueta-seccion">Semanario del Gimnasio Moderno</p>
+      <h2>La Pluma</h2>
+      <p class="pluma-intro" id="pluma-intro-subtitulo"></p>
+      <div id="render-la-pluma"></div>
+    </div>
+  </section>
+
+
+  <!-- ══ REVISTAS / ARCHIVO ══════════════════════════════════ -->
+  <section id="revistas">
+    <div class="contenedor">
+      <p class="etiqueta-seccion">Publicaciones</p>
+      <h2>Ediciones</h2>
+      <p class="seccion-intro">Explora el archivo o descubre una edición al azar.</p>
+
+      <div class="decadas-filtro" id="decadas-filtro" aria-label="Filtrar por década"></div>
+
+      <div id="grid-aleatorio" class="grid-ediciones"></div>
+
+      <a id="banner-archivo-link" href="#"
+         class="banner-archivo" target="_blank" rel="noopener noreferrer">
+        <div>
+          <p class="banner-archivo-titulo">Archivo histórico completo</p>
+          <p class="banner-archivo-subtitulo" id="banner-total-ediciones">256 ediciones desde 1927</p>
+        </div>
+        <span class="banner-archivo-flecha" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+
+  <!-- ══ PRESIDENTES ═════════════════════════════════════════ -->
+  <section id="presidentes">
+    <div class="contenedor">
+      <p class="etiqueta-seccion">Quiénes somos</p>
+      <h2>Presidentes y equipo</h2>
+      <p class="seccion-intro">Los estudiantes que han dado vida a El Aguilucho este año.</p>
+      <div id="render-presidentes" class="grid-presidentes"></div>
+
+      <div class="equipo-encabezado fade-up">
+        <h3>Equipo</h3>
+        <p>Los estudiantes que hacen posible cada edición.</p>
+      </div>
+      <div id="render-equipo" class="grid-equipo"></div>
+    </div>
+  </section>
+
+
+  <!-- ══ CONTACTO ════════════════════════════════════════════ -->
+  <section id="contacto">
+    <div class="contenedor">
+      <p class="etiqueta-seccion">Escríbenos</p>
+      <h2>Contáctanos</h2>
+      <p class="seccion-intro">
+        ¿Quieres colaborar, enviar un artículo o simplemente saludarnos?
+        Estamos en las redes sociales y en los pasillos del Gimnasio Moderno.
+      </p>
+      <div class="grid-contacto">
+        <div class="contacto-bloque fade-up">
+          <h3>Redes sociales</h3>
+          <a id="contacto-instagram-link" href="#" target="_blank" rel="noopener noreferrer" class="contacto-instagram"></a>
+          <p style="color:rgba(255,255,255,0.55); font-size:0.9rem;">
+            Síguenos en Instagram para contenido exclusivo, detrás de cámaras
+            y las novedades de cada edición.
+          </p>
+          <div class="redes-sociales" style="margin-top:1.5rem;">
+            <a id="contacto-red-instagram" href="#" target="_blank" rel="noopener noreferrer" class="red-link">Instagram</a>
+          </div>
+        </div>
+        <div class="contacto-bloque fade-up" data-delay="2">
+          <h3>Encuéntranos</h3>
+          <address>
+            <p>
+              Gimnasio Moderno<br>
+              <span id="contacto-direccion"></span>
+            </p>
+          </address>
+          <p style="margin-top:1rem;">
+            <a id="contacto-email-link" href="#" class="contacto-email-link"></a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══ FOOTER ══════════════════════════════════════════════ -->
+  <footer id="pie">
+    <div class="pie-grid">
+      <div class="pie-columna">
+        <p>
+          <strong class="pie-logo-nombre">El Aguilucho</strong>
+          La revista estudiantil más antigua de América Latina.
+          Fundada en 1927 en el Gimnasio Moderno de Bogotá, Colombia.
+        </p>
+      </div>
+      <div class="pie-columna">
+        <h4>Gimnasio Moderno</h4>
+        <ul>
+          <li><a href="https://www.gimnasiomoderno.edu.co" target="_blank" rel="noopener">Sitio oficial</a></li>
+          <li><a href="https://gimnasiomoderno.edu.co/gimnasio/historia/historia-ilustrada-1914-1923/" target="_blank" rel="noopener">Historia del colegio</a></li>
+        </ul>
+      </div>
+      <div class="pie-columna">
+        <h4>Recursos</h4>
+        <ul>
+          <li><a href="#revistas">Archivo de ediciones</a></li>
+          <li><a href="#la-pluma">La Pluma</a></li>
+        </ul>
+      </div>
+      <div class="pie-columna">
+        <h4>Dirección</h4>
+        <p>
+          Cra. 9ª #74-99<br>Bogotá, Colombia<br><br>
+          <a id="pie-email" href="#" style="color:rgba(255,255,255,0.55);"></a>
+        </p>
+      </div>
+    </div>
+    <div class="pie-bottom">
+      <p id="pie-copyright"></p>
+      <div class="pie-redes">
+        <a id="pie-instagram" href="#" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ══ JAVASCRIPT ══════════════════════════════════════════ -->
+  <script>
+  (function () {
+    'use strict';
+
+    // ── Utilidades ───────────────────────────────────────────
+    function fisherYates(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function agruparPorDecada(arr) {
+      const mapa = {};
+      arr.forEach(ed => {
+        const dec = Math.floor(parseInt(ed.anio, 10) / 10) * 10;
+        const key = dec + 's';
+        if (!mapa[key]) mapa[key] = [];
+        mapa[key].push(ed);
+      });
+      return mapa;
+    }
+
+    // ── Render: Edición actual ────────────────────────────────
+    function renderEdicionActual() {
+      const e = EDICION_ACTUAL;
+      document.getElementById('render-edicion-actual').innerHTML = `
+        <div class="edicion-portada-col fade-up">
+          <a href="${e.linkCompra}" target="_blank" rel="noopener noreferrer" aria-label="Adquirir ${e.numero} de El Aguilucho">
+            <img src="${e.portada}"
+                 alt="Portada ${e.numero} El Aguilucho"
+                 loading="eager"
+                 onerror="this.onerror=null; this.style.background='#222'; this.removeAttribute('src')" />
+          </a>
+          <span class="edicion-portada-sello">Edición actual</span>
+        </div>
+        <div class="edicion-info-col fade-up" data-delay="2">
+          <div class="edicion-info-inner">
+            <p class="etiqueta-seccion">Disponible ahora</p>
+            <h2>${e.numero}</h2>
+            <p class="edicion-intro">${e.intro}</p>
+            <p class="edicion-intro" style="color:var(--gris-medio);font-size:0.95rem;">${e.subtexto}</p>
+            <div class="edicion-precio-bloque">
+              <div>
+                <span class="edicion-precio-label">Precio</span>
+                <span class="edicion-precio">${e.precio}</span>
+              </div>
+              <a href="${e.linkCompra}" target="_blank" rel="noopener noreferrer" class="btn-comprar">
+                Adquirir revista
+              </a>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    // ── Render: Historia ─────────────────────────────────────
+    function renderHistoria() {
+      const h = HISTORIA;
+      const parrafosHTML = h.parrafos
+        .map(p => `<p>${p}</p>`)
+        .join('');
+
+      document.getElementById('render-historia').innerHTML = `
+        <div class="historia-texto fade-up">
+          <p class="etiqueta-seccion">Nuestra historia</p>
+          <h2>El Aguilucho</h2>
+          <hr style="border:none; border-top:1px solid var(--negro); margin-bottom:2.5rem;" />
+          ${parrafosHTML}
+          <blockquote>
+            <p>${h.cita}</p>
+            <footer><cite>— ${h.citaAutor}</cite></footer>
+          </blockquote>
+        </div>
+        <figure class="historia-imagen fade-up" data-delay="2">
+          <img
+            src="${h.imagen}"
+            alt="${h.imagenAlt}"
+            loading="lazy"
+            onerror="this.onerror=null; this.style.background='var(--gris-fondo)'; this.removeAttribute('src')"
+          />
+          <figcaption>${h.pieFoto}</figcaption>
+        </figure>`;
+    }
+
+    // ── Render: Anuncios ──────────────────────────────────────
+    function renderAnuncios() {
+      const html = ANUNCIOS.map(a => {
+        const tag = a.link ? 'a' : 'div';
+        const href = a.link ? `href="${a.link}" target="_blank" rel="noopener noreferrer"` : '';
+        return `<${tag} class="anuncio-item" ${href}>
+          <img src="${a.imagen}" alt="${a.alt}" class="anuncio-imagen" loading="lazy"
+               onerror="this.onerror=null; this.closest('.anuncio-item').style.display='none'" />
+        </${tag}>`;
+      }).join('');
+      document.getElementById('render-anuncios').innerHTML = html;
+    }
+
+    // ── Render: La Pluma ──────────────────────────────────────
+    function renderLaPluma() {
+      const plumas = LA_PLUMA;
+      const cont = document.getElementById('render-la-pluma');
+      if (!plumas || plumas.length === 0) {
+        cont.innerHTML = '<p style="color:var(--gris-medio);">Próximamente.</p>';
+        return;
+      }
+
+      const [primera, ...resto] = plumas;
+
+      // Subtítulo de la sección (editable desde datos.js)
+      const subt = document.getElementById('pluma-intro-subtitulo');
+      if (subt) subt.textContent = PLUMA_INFO.subtitulo;
+
+      // Edición destacada
+      const destacada = `
+        <div class="pluma-destacada fade-up">
+          <div class="pluma-numero-grande"><span>${primera.numero}</span></div>
+          <div class="pluma-destacada-texto">
+            <p class="pluma-edicion-label">La Pluma · Edición ${primera.numero}</p>
+            <h3 class="pluma-titulo">${PLUMA_INFO.destacadoEdicion}</h3>
+            <a href="${primera.link}" target="_blank" rel="noopener noreferrer" class="btn-leer-pluma">
+              Leer edición ${primera.numero} — ${primera.mes}
+            </a>
+          </div>
+        </div>`;
+
+      function cardHTML(p, i) {
+        return `
+          <div class="pluma-card fade-up" data-delay="${Math.min(i + 1, 3)}">
+            <div class="pluma-card-num">${p.numero}</div>
+            <div class="pluma-card-mes">${p.mes}</div>
+            <a href="${p.link}" target="_blank" rel="noopener noreferrer" class="btn-leer-pluma">Leer</a>
+          </div>`;
+      }
+
+      let gridAnterior = '';
+      if (resto.length > 0) {
+        // Opción B: mostrar solo las 2 siguientes, ocultar el resto
+        const visibles = resto.slice(0, 2);
+        const ocultas  = resto.slice(2);
+
+        const cardsVisibles = visibles.map((p, i) => cardHTML(p, i)).join('');
+        const cardsOcultas  = ocultas.map((p, i) => cardHTML(p, i)).join('');
+
+        const botonVerTodas = ocultas.length > 0
+          ? `<button id="btn-ver-todas-pluma" class="btn-ver-todas">
+               Ver todas las ediciones (${resto.length})
+             </button>`
+          : '';
+
+        gridAnterior = `
+          <div class="pluma-grid" style="margin-top:1.5rem;">${cardsVisibles}</div>
+          <div class="pluma-grid pluma-ocultas" id="pluma-ocultas" style="margin-top:1.5rem;">${cardsOcultas}</div>
+          ${botonVerTodas}`;
+      }
+
+      cont.innerHTML = destacada + gridAnterior;
+
+      // Toggle "Ver todas"
+      const btn = document.getElementById('btn-ver-todas-pluma');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          const ocultas = document.getElementById('pluma-ocultas');
+          const abierto = ocultas.classList.toggle('visible-grid');
+          btn.textContent = abierto
+            ? 'Ver menos'
+            : `Ver todas las ediciones (${plumas.length - 1})`;
+          if (abierto) {
+            ocultas.querySelectorAll('.fade-up').forEach(el => el.classList.add('visible'));
+          }
+        });
+      }
+    }
+
+    // ── Render: Archivo + filtro por décadas ─────────────────
+    let decadaActiva = 'aleatorio';
+    const porDecada = agruparPorDecada(ARCHIVO);
+
+    function tarjetaHTML(ed, delay) {
+      return `
+        <div class="tarjeta-edicion entrando" style="animation-delay:${delay * 80}ms">
+          <span class="tarjeta-edicion-numero">${ed.numero}</span>
+          <span class="tarjeta-edicion-anio">${ed.anio}</span>
+          <div class="tarjeta-edicion-sep"></div>
+          <a href="${ed.link}" target="_blank" rel="noopener noreferrer" class="tarjeta-edicion-btn">Leer</a>
+        </div>`;
+    }
+
+    function mostrarEdiciones(lista) {
+      const grid = document.getElementById('grid-aleatorio');
+      // Sacar las actuales
+      grid.querySelectorAll('.tarjeta-edicion').forEach(el => el.classList.add('saliendo'));
+      setTimeout(() => {
+        const cinco = lista.length > 5 ? fisherYates(lista).slice(0, 5) : fisherYates(lista);
+        grid.innerHTML = cinco.map((ed, i) => tarjetaHTML(ed, i)).join('');
+      }, 200);
+    }
+
+    function initArchivo() {
+      const filtro = document.getElementById('decadas-filtro');
+      const decadas = Object.keys(porDecada).sort();
+
+      // Botón "Descubrir"
+      const btnDesc = document.createElement('button');
+      btnDesc.className = 'decada-btn activo';
+      btnDesc.textContent = 'Descubrir';
+      btnDesc.dataset.decada = 'aleatorio';
+      filtro.appendChild(btnDesc);
+
+      decadas.forEach(dec => {
+        const btn = document.createElement('button');
+        btn.className = 'decada-btn';
+        btn.textContent = dec;
+        btn.dataset.decada = dec;
+        filtro.appendChild(btn);
+      });
+
+      filtro.addEventListener('click', e => {
+        const btn = e.target.closest('.decada-btn');
+        if (!btn) return;
+        filtro.querySelectorAll('.decada-btn').forEach(b => b.classList.remove('activo'));
+        btn.classList.add('activo');
+        decadaActiva = btn.dataset.decada;
+        const lista = decadaActiva === 'aleatorio' ? ARCHIVO : porDecada[decadaActiva];
+        mostrarEdiciones(lista);
+      });
+
+      // Carga inicial: 5 aleatorias de todo el archivo
+      mostrarEdiciones(ARCHIVO);
+
+      // Banner con el total real
+      document.getElementById('banner-total-ediciones').textContent =
+        `${REVISTA.totalEdiciones} ediciones desde ${REVISTA.fundacion}`;
+    }
+
+    // ── Render: Presidentes ───────────────────────────────────
+    function renderPresidentes() {
+      const html = PRESIDENTES.map((p, i) => `
+        <div class="tarjeta-presidente fade-up" data-delay="${Math.min(i + 1, 5)}">
+          <img src="${p.foto}" alt="${p.nombre}" class="presidente-foto" loading="lazy"
+               onerror="this.onerror=null; this.removeAttribute('src'); this.style.background='var(--gris-linea)'" />
+          <p class="presidente-nombre">${p.nombre}</p>
+          <p class="presidente-cargo">${p.cargo}</p>
+          <p class="presidente-periodo">${p.periodo}</p>
+        </div>`).join('');
+      document.getElementById('render-presidentes').innerHTML = html;
+    }
+
+    // ── Render: Equipo ────────────────────────────────────────
+    function renderEquipo() {
+      const html = EQUIPO.map(m => `
+        <div class="entrada-equipo">
+          <span class="entrada-equipo-nombre">${m.nombre}</span>
+          <span class="entrada-equipo-cargo">${m.cargo}</span>
+        </div>`).join('');
+      document.getElementById('render-equipo').innerHTML = html;
+    }
+
+    // ── Render: Contacto + Footer ─────────────────────────────
+    function renderContactoFooter() {
+      const r = REVISTA;
+
+      // Banner archivo histórico
+      const bannerArchivo = document.getElementById('banner-archivo-link');
+      if (bannerArchivo) bannerArchivo.href = r.archivoUrl;
+
+      // Contacto
+      document.getElementById('contacto-instagram-link').href        = r.instagramUrl;
+      document.getElementById('contacto-instagram-link').textContent = r.instagram;
+      document.getElementById('contacto-red-instagram').href         = r.instagramUrl;
+      document.getElementById('contacto-direccion').textContent      = r.direccion;
+      const emailLink = document.getElementById('contacto-email-link');
+      emailLink.href        = `mailto:${r.email}`;
+      emailLink.textContent = r.email;
+
+      // Footer
+      const pieEmail = document.getElementById('pie-email');
+      pieEmail.href        = `mailto:${r.email}`;
+      pieEmail.textContent = r.email;
+      document.getElementById('pie-instagram').href        = r.instagramUrl;
+      document.getElementById('pie-copyright').textContent = r.copyright;
+    }
+
+    // ── Animaciones de scroll con IntersectionObserver ────────
+    function initScrollAnimations() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    }
+
+    // ── Contadores animados ───────────────────────────────────
+    function animarContador(el) {
+      const target  = parseInt(el.dataset.target, 10);
+      const dur     = 1800;
+      const inicio  = performance.now();
+      function step(now) {
+        const t = Math.min((now - inicio) / dur, 1);
+        const ease = 1 - Math.pow(1 - t, 4); // ease-out quart
+        el.textContent = Math.round(ease * target);
+        if (t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    function initContadores() {
+      const counters = document.querySelectorAll('.stat-numero[data-target]');
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animarContador(entry.target);
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      counters.forEach(c => obs.observe(c));
+    }
+
+    // ── Header glassmorphism en scroll ────────────────────────
+    function initHeader() {
+      const header = document.getElementById('encabezado');
+      const heroH  = () => document.getElementById('inicio').offsetHeight;
+      window.addEventListener('scroll', () => {
+        header.classList.toggle('scrolled', window.scrollY > heroH() * 0.6);
+      }, { passive: true });
+    }
+
+    // ── Link activo en nav al hacer scroll ────────────────────
+    function initNavActiva() {
+      const secciones = document.querySelectorAll('section[id]');
+      const links     = document.querySelectorAll('.nav-principal a');
+      const header    = document.getElementById('encabezado');
+
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            links.forEach(link => {
+              link.classList.toggle('activo', link.getAttribute('href') === '#' + id);
+            });
+          }
+        });
+      }, { rootMargin: `-${header.offsetHeight + 10}px 0px -60% 0px` });
+
+      secciones.forEach(s => obs.observe(s));
+    }
+
+    // ── Menú hamburguesa ─────────────────────────────────────
+    function initMenu() {
+      const btn = document.getElementById('btnMenu');
+      const nav = document.getElementById('navMovil');
+      btn.addEventListener('click', () => {
+        const open = nav.classList.toggle('abierto');
+        btn.setAttribute('aria-expanded', open);
+      });
+      document.querySelectorAll('.nav-link-movil').forEach(link => {
+        link.addEventListener('click', () => {
+          nav.classList.remove('abierto');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+
+    // ── Scroll suave ─────────────────────────────────────────
+    function initSmoothScroll() {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const id = this.getAttribute('href');
+          if (id === '#') return;
+          const target = document.querySelector(id);
+          if (target) {
+            e.preventDefault();
+            const offset = document.getElementById('encabezado').offsetHeight;
+            const top    = target.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top, behavior: 'smooth' });
+          }
+        });
+      });
+    }
+
+    // ── Inicializar todo ──────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      renderEdicionActual();
+      renderAnuncios();
+      renderHistoria();
+      renderLaPluma();
+      renderPresidentes();
+      renderEquipo();
+      renderContactoFooter();
+      initArchivo();
+
+      // Las animaciones se inicializan después de que el DOM esté completo
+      requestAnimationFrame(() => {
+        initScrollAnimations();
+        initContadores();
+        initHeader();
+        initNavActiva();
+        initMenu();
+        initSmoothScroll();
+      });
+    });
+
+  })();
+  </script>
+
+</body>
+</html>
