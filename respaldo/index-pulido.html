@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="es" class="sin-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>El Aguilucho · Gimnasio Moderno · Bogotá</title>
+  <meta name="description" content="El Aguilucho es la revista estudiantil más antigua de América Latina, fundada en 1927 en el Gimnasio Moderno de Bogotá, Colombia." />
+  <meta name="theme-color" content="#111111" />
+  <meta property="og:title" content="El Aguilucho · Gimnasio Moderno" />
+  <meta property="og:description" content="La publicación estudiantil más antigua de América Latina. Desde 1927." />
+  <meta property="og:image" content="images/portada.jpg" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/png" href="images/logo.png" />
+
+  <!-- Marca que hay JS antes de pintar: evita que el contenido
+       quede invisible si el JS falla o tarda. -->
+  <script>document.documentElement.className = 'js';</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet" />
+
+  <!-- datos.js carga primero para que el JS inline pueda leerlos -->
+  <script src="datos.js"></script>
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       EL AGUILUCHO — hoja de estilo
+       Principio rector: sobriedad editorial. La página hereda el
+       lenguaje del papel, no el de una landing page.
+       ═══════════════════════════════════════════════════════════ */
+
+    /* ── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      /* Tinta sobre papel */
+      --negro:      #111111;
+      --gris-oscuro:#333333;
+      --gris-medio: #666666;
+      --gris-claro: #767676; /* contraste 4.54:1 sobre blanco */
+      --gris-linea: #DDDDDD;
+      --gris-fondo: #F5F4F0;
+      --blanco:     #FFFFFF;
+      --crema:      #FAF9F6;
+
+      /* Tinta sobre fondo oscuro (mismo sistema, invertido) */
+      --inv-fuerte: rgba(255,255,255,0.92);
+      --inv-media:  rgba(255,255,255,0.68);
+      --inv-suave:  rgba(255,255,255,0.42);
+      --inv-linea:  rgba(255,255,255,0.16);
+
+      /* Tres registros tipográficos: título, cuerpo, metadato */
+      --serif-titulo: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --serif-cuerpo: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+      --sans:         'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+      /* Medidas */
+      --max-ancho:     1120px;
+      --medida:        62ch;   /* línea de lectura cómoda */
+      --medida-corta:  46ch;
+      --margen-x:      1.5rem;
+      --seccion-y:     clamp(4.5rem, 8vw, 7rem);
+
+      /* Curvas — las de CSS son demasiado débiles */
+      --ease-salida:   cubic-bezier(0.23, 1, 0.32, 1);
+      --ease-mov:      cubic-bezier(0.77, 0, 0.175, 1);
+
+      /* Duraciones */
+      --dur-presion:   140ms;
+      --dur-corto:     180ms;
+      --dur-medio:     240ms;
+      --dur-largo:     380ms;
+      --dur-revelado:  520ms;
+    }
+
+    /* ── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: var(--serif-cuerpo);
+      color: var(--negro);
+      background: var(--blanco);
+      line-height: 1.7;
+      font-optical-sizing: auto;
+      font-kerning: normal;
+      font-variant-numeric: oldstyle-nums;  /* cifras de texto, como en libro */
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img   { display: block; max-width: 100%; height: auto; }
+    a     { color: inherit; text-decoration: none; }
+    p     { margin-bottom: 1.15em; }
+    p:last-child { margin-bottom: 0; }
+    button { font: inherit; color: inherit; }
+    ::selection { background: var(--negro); color: var(--blanco); }
+
+    /* Todo lo tipográficamente "titular" usa cifras alineadas */
+    h1, h2, h3, h4, .cifra { font-variant-numeric: lining-nums; }
+
+    @media (prefers-reduced-motion: no-preference) {
+      html { scroll-behavior: smooth; }
+    }
+
+    /* ── UTILIDADES ─────────────────────────────────────────── */
+    .contenedor {
+      max-width: var(--max-ancho);
+      margin: 0 auto;
+      padding: 0 var(--margen-x);
+    }
+
+    /* Registro de metadatos: fechas, categorías, cargos */
+    .etiqueta-seccion {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+      margin-bottom: 0.9rem;
+    }
+
+    /* Titulares de sección — un solo sistema para toda la página.
+       El tracking se aprieta a medida que el cuerpo crece. */
+    .edicion-info-inner h2,
+    #el-aguilucho h2,
+    #la-pluma h2,
+    #revistas h2,
+    #presidentes h2,
+    #contacto h2 {
+      font-family: var(--serif-titulo);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.022em;
+      margin-bottom: 0.6rem;
+    }
+
+    /* Bajada de sección — siempre acotada a la medida de lectura */
+    .seccion-intro,
+    .pluma-intro {
+      font-size: 1.02rem;
+      color: var(--gris-medio);
+      max-width: var(--medida);
+    }
+
+    /* Filete editorial: cierra el bloque de titulares y abre el contenido */
+    .regla {
+      border: none;
+      border-top: 1px solid var(--negro);
+      margin: 1.75rem 0 2.75rem;
+    }
+    .seccion-oscura .regla { border-top-color: var(--inv-linea); }
+
+    /* ── REVELADO AL SCROLL ─────────────────────────────────── */
+    /* Solo se oculta si hay JS: sin JS la página se lee entera. */
+    .js .fade-up {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity   var(--dur-revelado) var(--ease-salida),
+        transform var(--dur-revelado) var(--ease-salida);
+    }
+    .js .fade-up.visible { opacity: 1; transform: none; }
+    .js .fade-up[data-delay="1"] { transition-delay: 60ms; }
+    .js .fade-up[data-delay="2"] { transition-delay: 120ms; }
+    .js .fade-up[data-delay="3"] { transition-delay: 180ms; }
+    .js .fade-up[data-delay="4"] { transition-delay: 240ms; }
+    .js .fade-up[data-delay="5"] { transition-delay: 300ms; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .js .fade-up {
+        opacity: 1; transform: none;
+        transition: opacity var(--dur-medio) ease;
+        transition-delay: 0ms !important;
+      }
+    }
+
+    /* ── FOCO ───────────────────────────────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--negro);
+      outline-offset: 3px;
+      border-radius: 1px;
+    }
+    /* Sobre fondo negro el contorno negro no existe */
+    .seccion-oscura :focus-visible { outline-color: var(--blanco); }
+
+    /* ── ENCABEZADO ─────────────────────────────────────────── */
+    /* Fijo, no sticky: sobre el hero es transparente y flota como
+       una cabecera de periódico; al pasar el hero se materializa. */
+    #encabezado {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      --tinta:        var(--negro);
+      --tinta-suave:  var(--gris-medio);
+      isolation: isolate;
+    }
+    /* Dos capas que se funden por opacidad en vez de saltar de golpe:
+       el material de papel y, sobre el hero, un velo oscuro propio
+       para que la cabecera no dependa de lo que haya en la foto. */
+    #encabezado::after,
+    #encabezado::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      z-index: -1;
+      pointer-events: none;
+      transition: opacity var(--dur-largo) ease;
+    }
+    #encabezado::after {          /* material claro */
+      inset: 0;
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border-bottom: 1px solid var(--negro);
+      opacity: 1;
+    }
+    #encabezado::before {         /* velo sobre el hero */
+      top: 0;
+      height: 190%;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 100%);
+      opacity: 0;
+    }
+    #encabezado.sobre-hero {
+      --tinta:       var(--blanco);
+      --tinta-suave: rgba(255,255,255,0.66);
+    }
+    #encabezado.sobre-hero::after  { opacity: 0; }
+    #encabezado.sobre-hero::before { opacity: 1; }
+    .encabezado-interior {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 0.85rem var(--margen-x);
+      max-width: var(--max-ancho);
+      margin: 0 auto;
+    }
+    .logo-marca { display: flex; flex-direction: column; line-height: 1.15; }
+    .logo-nombre {
+      font-family: var(--serif-titulo);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.005em;
+      color: var(--tinta);
+      transition: color var(--dur-largo) ease;
+    }
+    .logo-subtitulo {
+      font-family: var(--sans);
+      font-size: 0.62rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--tinta-suave);
+      transition: color var(--dur-largo) ease;
+    }
+    .nav-principal { display: flex; gap: 1.9rem; list-style: none; }
+    .nav-principal a {
+      position: relative;
+      display: block;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--tinta-suave);
+      padding-bottom: 3px;
+      transition: color var(--dur-medio) ease;
+    }
+    /* Subrayado que crece desde la izquierda en vez de aparecer de golpe */
+    .nav-principal a::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 1px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform var(--dur-medio) var(--ease-salida);
+    }
+    .nav-principal a.activo { color: var(--tinta); }
+    .nav-principal a.activo::after { transform: scaleX(1); }
+    @media (hover: hover) and (pointer: fine) {
+      .nav-principal a:hover { color: var(--tinta); }
+      .nav-principal a:hover::after { transform: scaleX(1); }
+    }
+
+    .btn-menu {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      align-items: flex-end;
+    }
+    .btn-menu span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--tinta);
+      transition:
+        transform var(--dur-medio) var(--ease-salida),
+        opacity   var(--dur-corto) ease,
+        background-color var(--dur-largo) ease;
+    }
+    .btn-menu[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .btn-menu[aria-expanded="true"] span:nth-child(2) { opacity: 0; transform: scaleX(0.4); }
+    .btn-menu[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .btn-menu:active span { transform-origin: center; }
+
+    /* Menú móvil: despliegue por altura, interrumpible */
+    .nav-movil {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows var(--dur-medio) var(--ease-salida);
+    }
+    .nav-movil.abierto { grid-template-rows: 1fr; }
+    .nav-movil-interior { overflow: hidden; min-height: 0; }
+    .nav-movil ul {
+      list-style: none;
+      padding: 0.5rem var(--margen-x) 1rem;
+      border-top: 1px solid var(--gris-linea);
+    }
+    .nav-movil ul li a {
+      display: block;
+      padding: 0.7rem 0;
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gris-oscuro);
+      border-bottom: 1px solid var(--gris-linea);
+      transition: color var(--dur-corto) ease;
+    }
+    .nav-movil ul li:last-child a { border-bottom: none; }
+    .nav-movil ul li a:active { color: var(--negro); }
+
+    /* ── HERO ───────────────────────────────────────────────── */
+    #inicio {
+      position: relative;
+      height: 100vh;
+      height: 100svh;
+      min-height: 560px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      background: var(--negro);
+    }
+    .hero-imagen {
+      position: absolute;
+      inset: 0;
+      background-image: url('images/hero.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+    /* Doble velo: uno abajo para el titular, otro arriba para la cabecera */
+    .hero-imagen::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top,   rgba(0,0,0,0.90) 0%, rgba(0,0,0,0.34) 52%, rgba(0,0,0,0) 78%),
+        linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 26%);
+    }
+
+    .hero-eagle {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 1;
+    }
+    /* Entrada por @starting-style: el estado de reposo es el visible,
+       así que si el navegador no anima, la marca sigue ahí. */
+    .hero-eagle svg {
+      width: min(70vw, 620px);
+      height: auto;
+      fill: white;
+      opacity: 0.09;
+      transform: none;
+      transition: opacity 1.2s var(--ease-salida) 0.15s,
+                  transform 1.2s var(--ease-salida) 0.15s;
+    }
+    @starting-style {
+      .hero-eagle svg { opacity: 0; transform: scale(0.94); }
+    }
+
+    .hero-contenido {
+      position: relative;
+      z-index: 2;
+      padding: 0 var(--margen-x) clamp(3rem, 7vh, 4.5rem);
+      max-width: var(--max-ancho);
+      width: 100%;
+      margin: 0 auto;
+    }
+    .hero-etiqueta {
+      font-family: var(--sans);
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.62);
+      margin-bottom: 1.1rem;
+    }
+    .hero-titulo {
+      font-family: var(--serif-titulo);
+      font-size: clamp(2.8rem, 7vw, 5.75rem);
+      font-weight: 700;
+      color: var(--blanco);
+      line-height: 1.02;
+      letter-spacing: -0.032em;   /* tracking negativo: el display se separa al crecer */
+      margin-bottom: 1.1rem;
+      max-width: 15ch;
+      text-wrap: balance;
+    }
+    .hero-subtitulo {
+      font-family: var(--serif-titulo);
+      font-size: 1.05rem;
+      font-style: italic;
+      color: rgba(255,255,255,0.66);
+      letter-spacing: 0.04em;
+    }
+    /* Entrada escalonada y corta: la primera impresión no se hace esperar.
+       Mismo principio que el águila — el reposo es el estado visible. */
+    .hero-etiqueta,
+    .hero-titulo,
+    .hero-subtitulo {
+      opacity: 1;
+      transform: none;
+      transition: opacity 0.7s var(--ease-salida), transform 0.7s var(--ease-salida);
+    }
+    .hero-etiqueta  { transition-delay: 0.12s; }
+    .hero-titulo    { transition-delay: 0.20s; }
+    .hero-subtitulo { transition-delay: 0.28s; }
+    @starting-style {
+      .hero-etiqueta,
+      .hero-titulo,
+      .hero-subtitulo { opacity: 0; transform: translateY(14px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-eagle svg,
+      .hero-etiqueta,
+      .hero-titulo,
+      .hero-subtitulo {
+        transition-duration: 0.3s;
+        transition-property: opacity;
+        transform: none !important;
+      }
+    }
+
+    /* ── PRESIONABLES ───────────────────────────────────────── */
+    /* Todo lo que se pulsa responde al instante. */
+    .btn-comprar,
+    .btn-ver-todas,
+    .decada-btn,
+    .btn-leer-pluma,
+    .tarjeta-edicion-btn,
+    .banner-archivo {
+      -webkit-tap-highlight-color: transparent;
+      transition:
+        background-color var(--dur-medio) ease,
+        color            var(--dur-medio) ease,
+        border-color     var(--dur-medio) ease,
+        transform        var(--dur-presion) var(--ease-salida);
+    }
+    .btn-comprar:active,
+    .btn-ver-todas:active,
+    .decada-btn:active,
+    .btn-leer-pluma:active,
+    .tarjeta-edicion-btn:active { transform: scale(0.97); }
+    .banner-archivo:active { transform: scale(0.995); }
+
+    /* Botón sólido — invierte fondo y tinta */
+    .btn-comprar {
+      display: inline-block;
+      font-family: var(--sans);
+      font-size: 0.71rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--blanco);
+      background: var(--negro);
+      border: 1px solid var(--negro);
+      padding: 0.8rem 1.7rem;
+      white-space: nowrap;
+    }
+    /* Botón de contorno */
+    .btn-ver-todas {
+      display: inline-block;
+      margin-top: 2.25rem;
+      font-family: var(--sans);
+      font-size: 0.69rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--negro);
+      background: transparent;
+      border: 1px solid var(--negro);
+      padding: 0.8rem 1.7rem;
+      cursor: pointer;
+    }
+    /* Enlace-subrayado */
+    .btn-leer-pluma,
+    .tarjeta-edicion-btn {
+      display: inline-block;
+      align-self: flex-start;
+      font-family: var(--sans);
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--negro);
+      border-bottom: 1px solid var(--negro);
+      padding-bottom: 3px;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .btn-comprar:hover   { background: var(--blanco); color: var(--negro); }
+      .btn-ver-todas:hover { background: var(--negro);  color: var(--blanco); }
+      .btn-leer-pluma:hover,
+      .tarjeta-edicion-btn:hover { color: var(--gris-medio); border-bottom-color: var(--gris-medio); }
+    }
+
+    /* ── EDICIÓN ACTUAL ─────────────────────────────────────── */
+    #edicion-actual { border-bottom: 1px solid var(--gris-linea); }
+    .grid-edicion-actual {
+      display: grid;
+      grid-template-columns: 42% 58%;
+      align-items: stretch;
+      min-height: 600px;
+    }
+    /* Panel izquierdo — negro, portada flotante */
+    .edicion-portada-col {
+      background: var(--negro);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5rem 3.5rem;
+      position: relative;
+    }
+    .edicion-portada-marco { position: relative; width: 100%; max-width: 268px; }
+    .edicion-portada-col img {
+      width: 100%;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.55);
+      transition:
+        transform  var(--dur-largo) var(--ease-salida),
+        box-shadow var(--dur-largo) ease;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .edicion-portada-marco a:hover img {
+        transform: translateY(-10px);
+        box-shadow: 0 48px 76px rgba(0,0,0,0.62);
+      }
+    }
+    .edicion-portada-marco a:active img { transform: translateY(-4px); }
+    /* Sello desbordado sobre la portada, como una faja de imprenta */
+    .edicion-portada-sello {
+      position: absolute;
+      left: -0.9rem;
+      bottom: -1.15rem;
+      background: var(--blanco);
+      color: var(--negro);
+      font-family: var(--sans);
+      font-size: 0.56rem;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      padding: 0.5rem 0.9rem;
+      pointer-events: none;
+    }
+
+    /* Panel derecho — papel, información editorial */
+    .edicion-info-col {
+      background: var(--gris-fondo);
+      display: flex;
+      align-items: center;
+    }
+    .edicion-info-inner { padding: clamp(3rem, 6vw, 5rem) clamp(2rem, 4vw, 4rem); max-width: 560px; }
+    .edicion-intro {
+      font-size: 1.02rem;
+      color: var(--gris-oscuro);
+      max-width: var(--medida);
+    }
+    .edicion-subtexto {
+      font-size: 0.92rem;
+      color: var(--gris-medio);
+      font-style: italic;
+    }
+    .edicion-precio-bloque {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      flex-wrap: wrap;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--gris-linea);
+      margin-top: 1.75rem;
+    }
+    .edicion-precio {
+      font-family: var(--serif-titulo);
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .edicion-precio-label {
+      font-family: var(--sans);
+      font-size: 0.63rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    /* ── ANUNCIOS ───────────────────────────────────────────── */
+    /* Si ninguna imagen carga, el JS oculta la sección entera:
+       nunca queda una franja vacía de 1px. */
+    #anuncios { background: var(--blanco); border-bottom: 1px solid var(--gris-linea); }
+    #anuncios[hidden] { display: none; }
+    .grid-anuncios { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
+    .anuncio-item { display: block; overflow: hidden; }
+    .anuncio-imagen {
+      width: 100%;
+      filter: grayscale(100%);
+      transition: filter var(--dur-largo) ease, transform var(--dur-largo) var(--ease-salida);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .anuncio-item:hover .anuncio-imagen { filter: grayscale(0%); transform: scale(1.02); }
+    }
+
+    /* ── EL AGUILUCHO ───────────────────────────────────────── */
+    #el-aguilucho {
+      padding: var(--seccion-y) 0;
+      background: var(--blanco);
+      border-bottom: 1px solid var(--gris-linea);
+    }
+    .grid-historia {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2.5rem, 5vw, 4.5rem);
+      align-items: start;
+    }
+    .historia-texto p { font-size: 1.04rem; color: var(--gris-oscuro); max-width: var(--medida); }
+    .historia-imagen { position: relative; }
+    .historia-imagen img {
+      width: 100%;
+      filter: grayscale(100%);
+      transition: filter var(--dur-largo) ease;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .historia-imagen:hover img { filter: grayscale(0%); }
+    }
+    .historia-imagen figcaption {
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gris-claro);
+      margin-top: 0.75rem;
+    }
+
+    /* Cita destacada: filete arriba y abajo, como en revista */
+    blockquote {
+      border-top: 1px solid var(--negro);
+      border-bottom: 1px solid var(--gris-linea);
+      padding: 1.75rem 0;
+      margin: 2.75rem 0 0;
+      max-width: var(--medida);
+    }
+    blockquote p {
+      font-family: var(--serif-titulo);
+      font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+      font-style: italic;
+      line-height: 1.34;
+      letter-spacing: -0.012em;
+      color: var(--negro);
+      text-wrap: pretty;
+    }
+    blockquote footer { margin-top: 1rem; }
+    blockquote footer cite {
+      font-family: var(--sans);
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gris-claro);
+      font-style: normal;
+    }
+
+    /* ── ESTADÍSTICAS ───────────────────────────────────────── */
+    #estadisticas {
+      padding: var(--seccion-y) 0;
+      background: var(--negro);
+      color: var(--blanco);
+      overflow: hidden;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      align-items: center;
+      margin-bottom: 3rem;
+    }
+    .stat-bloque { text-align: center; padding: 0 1.5rem; }
+    .stat-bloque + .stat-bloque { border-left: 1px solid var(--inv-linea); }
+    .stat-numero {
+      font-family: var(--serif-titulo);
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 700;
+      color: var(--blanco);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      font-variant-numeric: lining-nums tabular-nums;
+      display: block;
+    }
+    .stat-label {
+      font-family: var(--sans);
+      font-size: 0.64rem;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--inv-suave);
+      margin-top: 0.9rem;
+      display: block;
+    }
+    .stat-claim {
+      text-align: center;
+      font-family: var(--serif-titulo);
+      font-size: clamp(1.05rem, 2.4vw, 1.4rem);
+      font-style: italic;
+      line-height: 1.4;
+      color: var(--inv-media);
+      padding-top: 2.75rem;
+      border-top: 1px solid var(--inv-linea);
+      max-width: 46ch;
+      margin: 0 auto;
+    }
+
+    /* ── LA PLUMA ───────────────────────────────────────────── */
+    #la-pluma {
+      padding: var(--seccion-y) 0;
+      background: var(--crema);
+      border-bottom: 1px solid var(--gris-linea);
+    }
+    /* Edición destacada */
+    .pluma-destacada {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      background: var(--blanco);
+      border: 1px solid var(--negro);
+      margin-bottom: 2.5rem;
+      transition: box-shadow var(--dur-largo) ease;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .pluma-destacada:hover { box-shadow: 0 10px 34px rgba(0,0,0,0.07); }
+    }
+    .pluma-numero-grande {
+      font-family: var(--serif-titulo);
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      font-weight: 700;
+      color: var(--negro);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      font-variant-numeric: lining-nums;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid var(--negro);
+      padding: 2.5rem 1.5rem;
+    }
+    /* Playfair reserva sitio para descendentes: se sube ópticamente */
+    .pluma-numero-grande > span { display: block; transform: translateY(-0.06em); }
+    .pluma-destacada-texto {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: clamp(1.75rem, 3vw, 2.75rem);
+    }
+    .pluma-edicion-label {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+      margin-bottom: 0.9rem;
+    }
+    .pluma-titulo {
+      font-family: var(--serif-titulo);
+      font-size: clamp(1.15rem, 2vw, 1.45rem);
+      font-weight: 700;
+      line-height: 1.28;
+      letter-spacing: -0.015em;
+      margin-bottom: 1.4rem;
+      max-width: 34ch;
+    }
+    /* Rejilla de ediciones anteriores */
+    .pluma-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .pluma-card {
+      border-top: 2px solid var(--negro);
+      padding-top: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .pluma-card-num {
+      font-family: var(--serif-titulo);
+      font-size: 1.55rem;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      font-variant-numeric: lining-nums;
+      margin-bottom: 0.35rem;
+      transition: transform var(--dur-medio) var(--ease-salida);
+    }
+    .pluma-card-mes {
+      font-family: var(--sans);
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+      margin-bottom: 1.1rem;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .pluma-card:hover .pluma-card-num { transform: translateX(4px); }
+    }
+    .pluma-ocultas { display: none; }
+    .pluma-ocultas.visible-grid { display: grid; }
+
+    /* ── REVISTAS / ARCHIVO ─────────────────────────────────── */
+    #revistas {
+      padding: var(--seccion-y) 0;
+      background: var(--blanco);
+      border-bottom: 1px solid var(--gris-linea);
+    }
+    /* Filtro por décadas */
+    .decadas-filtro {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 2.25rem;
+    }
+    .decada-btn {
+      font-family: var(--sans);
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-variant-numeric: lining-nums;
+      border: 1px solid var(--gris-linea);
+      background: transparent;
+      color: var(--gris-medio);
+      padding: 0.5rem 0.95rem;
+      cursor: pointer;
+    }
+    .decada-btn.activo { background: var(--negro); color: var(--blanco); border-color: var(--negro); }
+    @media (hover: hover) and (pointer: fine) {
+      .decada-btn:hover { border-color: var(--negro); color: var(--negro); }
+      .decada-btn.activo:hover { color: var(--blanco); }
+    }
+
+    /* Rejilla de ediciones.
+       Cada tarjeta dibuja su propio filete con box-shadow y el gap de
+       1px los solapa: las líneas nunca se duplican y, si sobra una
+       celda, queda en blanco en vez de mostrar un bloque negro.
+       El número de columnas lo fija el JS según cuántas tarjetas hay. */
+    .grid-ediciones {
+      display: grid;
+      grid-template-columns: repeat(var(--cols, 5), 1fr);
+      gap: 1px;
+      margin-bottom: 2.75rem;
+      min-height: 168px;
+    }
+    .tarjeta-edicion {
+      padding: 2rem 1.4rem;
+      background: var(--blanco);
+      box-shadow: 0 0 0 1px var(--negro);
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      opacity: 0;
+      transform: translateY(10px);
+      transition:
+        opacity          var(--dur-largo) var(--ease-salida),
+        transform        var(--dur-largo) var(--ease-salida),
+        background-color var(--dur-medio) ease;
+    }
+    .tarjeta-edicion.dentro  { opacity: 1; transform: none; }
+    .tarjeta-edicion.saliendo { opacity: 0; transform: translateY(-6px); transition-delay: 0ms !important; }
+    @media (hover: hover) and (pointer: fine) {
+      .tarjeta-edicion:hover { background: var(--gris-fondo); }
+    }
+    .tarjeta-edicion-numero {
+      font-family: var(--serif-titulo);
+      font-size: 1.7rem;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-variant-numeric: lining-nums;
+    }
+    .tarjeta-edicion-anio {
+      font-family: var(--sans);
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      font-variant-numeric: lining-nums;
+      color: var(--gris-medio);
+    }
+    .tarjeta-edicion-sep { width: 1.75rem; height: 1px; background: var(--gris-linea); margin: 0.5rem 0; }
+    .tarjeta-edicion-btn { margin-top: auto; }
+
+    /* Banner del archivo histórico */
+    .banner-archivo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.85rem 2rem;
+      border: 1px solid var(--negro);
+      color: var(--negro);
+    }
+    .banner-archivo-titulo {
+      font-family: var(--serif-titulo);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+    }
+    .banner-archivo-subtitulo {
+      font-family: var(--sans);
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-variant-numeric: lining-nums;
+      color: var(--gris-medio);
+      margin-top: 0.35rem;
+      transition: color var(--dur-medio) ease;
+    }
+    .banner-archivo-flecha {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      transition: transform var(--dur-medio) var(--ease-salida);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .banner-archivo:hover { background: var(--negro); color: var(--blanco); }
+      .banner-archivo:hover .banner-archivo-subtitulo { color: rgba(255,255,255,0.6); }
+      .banner-archivo:hover .banner-archivo-flecha { transform: translateX(6px); }
+    }
+
+    /* ── PRESIDENTES Y EQUIPO ───────────────────────────────── */
+    #presidentes {
+      padding: var(--seccion-y) 0;
+      background: var(--gris-fondo);
+      border-bottom: 1px solid var(--gris-linea);
+    }
+    /* Retratos rectangulares con filete: registro de página impresa,
+       no de perfil de aplicación. Las filas se alinean solas. */
+    .grid-presidentes {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.75rem;
+    }
+    .tarjeta-presidente {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 0.3rem;
+    }
+    .presidente-retrato {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      background: var(--gris-linea);
+      border: 1px solid var(--gris-linea);
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .presidente-retrato img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(1.04);
+      transition:
+        filter    var(--dur-largo) ease,
+        transform var(--dur-largo) var(--ease-salida);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .tarjeta-presidente:hover .presidente-retrato img {
+        filter: grayscale(0%) contrast(1);
+        transform: scale(1.03);
+      }
+    }
+    /* Marca de agua para el retrato que aún no existe */
+    .presidente-retrato.vacante {
+      background: var(--blanco);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .presidente-retrato.vacante::after {
+      content: '';
+      width: 34%;
+      height: 1px;
+      background: var(--gris-linea);
+    }
+    .presidente-nombre {
+      font-family: var(--serif-titulo);
+      font-size: 1.02rem;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+    }
+    .presidente-nombre.pendiente { font-style: italic; font-weight: 400; color: var(--gris-claro); }
+    .presidente-cargo {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 600;
+      line-height: 1.5;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+    }
+    .presidente-periodo {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      font-variant-numeric: lining-nums;
+      color: var(--gris-claro);
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--gris-linea);
+      margin-top: 0.6rem;
+    }
+
+    /* Mancheta del equipo: agrupada por comité, como el staff de una revista */
+    .equipo-encabezado { margin-top: clamp(3.5rem, 6vw, 5rem); }
+    .equipo-encabezado h3 {
+      font-family: var(--serif-titulo);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+    }
+    .equipo-encabezado p { font-size: 0.95rem; color: var(--gris-medio); max-width: var(--medida); }
+    .grid-equipo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0 2.5rem;
+    }
+    .equipo-comite { padding: 1.25rem 0 1.75rem; border-top: 1px solid var(--negro); }
+    .equipo-comite h4 {
+      font-family: var(--sans);
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+      margin-bottom: 0.9rem;
+    }
+    .equipo-comite ul { list-style: none; }
+    .equipo-comite li {
+      font-family: var(--serif-cuerpo);
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--negro);
+    }
+
+    /* ── CONTACTO ───────────────────────────────────────────── */
+    #contacto {
+      padding: var(--seccion-y) 0;
+      background: var(--negro);
+      color: var(--blanco);
+    }
+    #contacto .etiqueta-seccion { color: var(--inv-suave); }
+    #contacto h2 { color: var(--blanco); }
+    #contacto .seccion-intro { color: var(--inv-media); }
+    .grid-contacto {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 5vw, 4rem);
+    }
+    .contacto-bloque h3 {
+      font-family: var(--sans);
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--inv-suave);
+      margin-bottom: 1.1rem;
+    }
+    .contacto-bloque p,
+    .contacto-bloque address {
+      font-family: var(--serif-cuerpo);
+      font-style: normal;
+      font-size: 1rem;
+      color: var(--inv-media);
+      line-height: 1.7;
+      max-width: var(--medida-corta);
+    }
+    .contacto-instagram {
+      font-family: var(--serif-titulo);
+      font-size: clamp(1.4rem, 3vw, 1.75rem);
+      font-weight: 600;
+      font-style: italic;
+      letter-spacing: -0.015em;
+      color: var(--blanco);
+      display: inline-block;
+      margin-bottom: 0.9rem;
+      border-bottom: 1px solid transparent;
+      transition: border-color var(--dur-medio) ease, transform var(--dur-presion) var(--ease-salida);
+    }
+    .contacto-instagram:active { transform: scale(0.98); }
+    @media (hover: hover) and (pointer: fine) {
+      .contacto-instagram:hover { border-bottom-color: var(--blanco); }
+    }
+    .contacto-email-link {
+      color: var(--inv-media);
+      border-bottom: 1px solid var(--inv-linea);
+      transition: color var(--dur-medio) ease, border-color var(--dur-medio) ease;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .contacto-email-link:hover { color: var(--blanco); border-bottom-color: var(--blanco); }
+    }
+
+    /* ── PIE ────────────────────────────────────────────────── */
+    #pie {
+      background: var(--negro);
+      border-top: 1px solid var(--inv-linea);
+      padding: 3.5rem var(--margen-x) 2rem;
+      color: var(--inv-media);
+    }
+    .pie-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+      gap: 2.5rem;
+      max-width: var(--max-ancho);
+      margin: 0 auto 3rem;
+    }
+    .pie-columna h4 {
+      font-family: var(--sans);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--inv-suave);
+      margin-bottom: 1rem;
+    }
+    .pie-columna ul { list-style: none; }
+    .pie-columna li { margin-bottom: 0.45rem; }
+    .pie-columna a,
+    .pie-columna p {
+      font-family: var(--serif-cuerpo);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--inv-media);
+    }
+    .pie-columna a { transition: color var(--dur-medio) ease; }
+    @media (hover: hover) and (pointer: fine) {
+      .pie-columna a:hover { color: var(--blanco); }
+    }
+    .pie-logo-nombre {
+      font-family: var(--serif-titulo);
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      color: var(--blanco);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .pie-bottom {
+      max-width: var(--max-ancho);
+      margin: 0 auto;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--inv-linea);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .pie-bottom p,
+    .pie-redes a {
+      font-family: var(--sans);
+      font-size: 0.64rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--inv-suave);
+    }
+    .pie-redes { display: flex; gap: 1.2rem; }
+    .pie-redes a { transition: color var(--dur-medio) ease; }
+    @media (hover: hover) and (pointer: fine) {
+      .pie-redes a:hover { color: var(--blanco); }
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .grid-edicion-actual    { grid-template-columns: 1fr; min-height: auto; }
+      .edicion-portada-col    { padding: 4rem 2rem; }
+      .edicion-info-inner     { max-width: none; }
+      .grid-historia          { grid-template-columns: 1fr; }
+      .historia-imagen        { order: -1; }
+      /* En pantallas medias las columnas las decide el ancho, no el JS */
+      .grid-ediciones         { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+      .grid-presidentes       { grid-template-columns: repeat(3, 1fr); gap: 1.5rem 1.25rem; }
+      .pie-grid               { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      :root { --seccion-y: 3.75rem; --margen-x: 1.15rem; }
+      .nav-principal          { display: none; }
+      .btn-menu               { display: flex; }
+      .logo-nombre            { font-size: 1.3rem; }
+      .hero-titulo            { font-size: clamp(2.4rem, 11vw, 3.2rem); letter-spacing: -0.028em; }
+      .pluma-destacada        { grid-template-columns: 1fr; }
+      .pluma-numero-grande    { border-right: none; border-bottom: 1px solid var(--negro); padding: 1.75rem; }
+      .pluma-grid             { grid-template-columns: 1fr 1fr; }
+      .grid-ediciones         { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+      .grid-presidentes       { grid-template-columns: repeat(2, 1fr); }
+      .stats-grid             { grid-template-columns: 1fr; }
+      .stat-bloque            { padding: 1.75rem 1rem; }
+      .stat-bloque + .stat-bloque { border-left: none; border-top: 1px solid var(--inv-linea); }
+      .grid-contacto          { grid-template-columns: 1fr; }
+      .pie-grid               { grid-template-columns: 1fr; gap: 2rem; }
+      .banner-archivo         { padding: 1.5rem 1.35rem; }
+    }
+
+    /* ── IMPRESIÓN ──────────────────────────────────────────── */
+    @media print {
+      #encabezado, .btn-menu, .nav-movil, .decadas-filtro,
+      .btn-ver-todas, .hero-eagle { display: none !important; }
+      body { background: #fff; color: #000; }
+      #inicio { height: auto; min-height: 0; padding: 2rem 0; }
+      .hero-imagen { display: none; }
+      .hero-titulo, .hero-etiqueta, .hero-subtitulo { color: #000; }
+      #estadisticas, #contacto, #pie, .edicion-portada-col {
+        background: #fff !important; color: #000 !important;
+      }
+      .stat-numero, #contacto h2, .pie-logo-nombre { color: #000 !important; }
+      .js .fade-up { opacity: 1 !important; transform: none !important; }
+      a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.7em; color: #666; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ ENCABEZADO ══════════════════════════════════════════ -->
+  <header id="encabezado" class="sobre-hero">
+    <div class="encabezado-interior">
+      <a href="#inicio" class="logo-marca">
+        <span class="logo-nombre">El Aguilucho</span>
+        <span class="logo-subtitulo">Gimnasio Moderno · Bogotá</span>
+      </a>
+      <nav aria-label="Navegación principal">
+        <ul class="nav-principal">
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#edicion-actual">Edición Actual</a></li>
+          <li><a href="#el-aguilucho">El Aguilucho</a></li>
+          <li><a href="#la-pluma">La Pluma</a></li>
+          <li><a href="#revistas">Revistas</a></li>
+          <li><a href="#presidentes">Presidentes</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+      <button class="btn-menu" id="btnMenu" aria-label="Abrir menú" aria-expanded="false" aria-controls="navMovil">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="nav-movil" id="navMovil" aria-label="Menú móvil">
+      <div class="nav-movil-interior">
+        <ul>
+          <li><a href="#inicio"         class="nav-link-movil">Inicio</a></li>
+          <li><a href="#edicion-actual" class="nav-link-movil">Edición Actual</a></li>
+          <li><a href="#el-aguilucho"   class="nav-link-movil">El Aguilucho</a></li>
+          <li><a href="#la-pluma"       class="nav-link-movil">La Pluma</a></li>
+          <li><a href="#revistas"       class="nav-link-movil">Revistas</a></li>
+          <li><a href="#presidentes"    class="nav-link-movil">Presidentes</a></li>
+          <li><a href="#contacto"       class="nav-link-movil">Contacto</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- ══ INICIO / HERO ═══════════════════════════════════════ -->
+  <section id="inicio">
+    <div class="hero-imagen" role="img" aria-label="Patio del Gimnasio Moderno al amanecer"></div>
+
+    <div class="hero-eagle" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 223.459139 135.550924" preserveAspectRatio="xMidYMid meet">
+        <g transform="translate(-4.000000,141.791129) scale(0.100000,-0.100000)">
+          <path d="M40 1416 c0 -13 13 -24 350 -297 124 -100 239 -194 257 -209 28 -25 152 -232 421 -705 43 -76 84 -141 90 -143 9 -3 88 121 172 273 19 33 61 105 94 160 33 55 65 109 71 120 6 11 43 74 83 141 62 105 82 129 149 185 43 35 155 127 248 204 94 77 200 164 238 194 37 29 64 57 61 62 -3 5 -8 7 -12 5 -4 -2 -104 -44 -222 -94 -118 -49 -281 -118 -362 -152 l-147 -62 -167 -262 c-92 -143 -175 -270 -185 -281 -17 -17 -21 -18 -33 -5 -18 18 -303 448 -337 507 -13 24 -27 43 -31 43 -6 0 -342 149 -478 212 -173 80 -260 115 -260 104z"/>
+          <path d="M106 1228 c8 -13 74 -105 203 -280 57 -78 74 -93 178 -160 141 -91 193 -121 198 -117 2 2 -20 43 -48 91 -55 92 -54 91 -404 384 -101 86 -147 115 -127 82z"/>
+          <path d="M2185 1220 c-11 -9 -105 -88 -210 -175 -223 -185 -252 -212 -269 -245 -6 -14 -25 -46 -40 -72 -17 -30 -23 -48 -15 -48 6 0 68 35 137 77 114 71 131 86 196 168 78 98 218 282 230 303 10 17 -6 13 -29 -8z"/>
+          <path d="M1057 976 c-46 -17 -43 -13 -50 -57 -4 -29 -2 -37 16 -45 19 -8 22 -17 22 -74 0 -62 3 -70 55 -152 30 -49 57 -88 60 -88 3 0 31 42 63 92 l57 93 0 107 c0 101 -1 108 -22 119 -35 19 -157 22 -201 5z"/>
+          <path d="M440 746 c0 -3 35 -38 77 -78 42 -40 120 -114 172 -164 208 -197 218 -200 125 -34 l-57 100 -121 69 c-66 38 -138 79 -158 91 -21 12 -38 19 -38 16z"/>
+          <path d="M1790 699 c-41 -27 -107 -68 -146 -90 -67 -39 -73 -46 -130 -142 -68 -116 -70 -121 -56 -116 15 6 422 383 422 391 0 14 -13 7 -90 -43z"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="hero-contenido">
+      <p class="hero-etiqueta">Gimnasio Moderno · Bogotá, Colombia</p>
+      <h1 class="hero-titulo">La voz del Gimnasio Moderno</h1>
+      <p class="hero-subtitulo">1927 – presente</p>
+    </div>
+  </section>
+
+
+  <!-- ══ EDICIÓN ACTUAL ══════════════════════════════════════ -->
+  <section id="edicion-actual">
+    <div id="render-edicion-actual" class="grid-edicion-actual"></div>
+  </section>
+
+
+  <!-- ══ ANUNCIOS ════════════════════════════════════════════ -->
+  <section id="anuncios" hidden>
+    <div id="render-anuncios" class="grid-anuncios"></div>
+  </section>
+
+
+  <!-- ══ EL AGUILUCHO ════════════════════════════════════════ -->
+  <section id="el-aguilucho">
+    <div class="contenedor">
+      <div id="render-historia" class="grid-historia"></div>
+    </div>
+  </section>
+
+
+  <!-- ══ ESTADÍSTICAS ════════════════════════════════════════ -->
+  <section id="estadisticas" class="seccion-oscura" aria-label="Estadísticas de la revista">
+    <div class="contenedor">
+      <div class="stats-grid">
+        <div class="stat-bloque fade-up">
+          <span class="stat-numero" data-target="99" aria-label="99 años">99</span>
+          <span class="stat-label">años de historia</span>
+        </div>
+        <div class="stat-bloque fade-up" data-delay="1">
+          <span class="stat-numero" data-target="256" aria-label="256 ediciones">256</span>
+          <span class="stat-label">ediciones publicadas</span>
+        </div>
+        <div class="stat-bloque fade-up" data-delay="2">
+          <span class="stat-numero">1927</span>
+          <span class="stat-label">año de fundación</span>
+        </div>
+      </div>
+      <p class="stat-claim fade-up" data-delay="3">
+        La publicación estudiantil más antigua de América Latina
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ══ LA PLUMA ════════════════════════════════════════════ -->
+  <section id="la-pluma">
+    <div class="contenedor">
+      <p class="etiqueta-seccion fade-up">Semanario del Gimnasio Moderno</p>
+      <h2 class="fade-up">La Pluma</h2>
+      <p class="pluma-intro fade-up" id="pluma-intro-subtitulo"></p>
+      <hr class="regla" />
+      <div id="render-la-pluma"></div>
+    </div>
+  </section>
+
+
+  <!-- ══ REVISTAS / ARCHIVO ══════════════════════════════════ -->
+  <section id="revistas">
+    <div class="contenedor">
+      <p class="etiqueta-seccion fade-up">Publicaciones</p>
+      <h2 class="fade-up">Ediciones</h2>
+      <p class="seccion-intro fade-up">Explora el archivo por décadas o descubre una edición al azar.</p>
+      <hr class="regla" />
+
+      <div class="decadas-filtro" id="decadas-filtro" role="group" aria-label="Filtrar por década"></div>
+
+      <div id="grid-aleatorio" class="grid-ediciones" aria-live="polite"></div>
+
+      <a id="banner-archivo-link" href="#"
+         class="banner-archivo fade-up" target="_blank" rel="noopener noreferrer">
+        <div>
+          <p class="banner-archivo-titulo">Archivo histórico completo</p>
+          <p class="banner-archivo-subtitulo" id="banner-total-ediciones">256 ediciones desde 1927</p>
+        </div>
+        <span class="banner-archivo-flecha" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+
+  <!-- ══ PRESIDENTES ═════════════════════════════════════════ -->
+  <section id="presidentes">
+    <div class="contenedor">
+      <p class="etiqueta-seccion fade-up">Quiénes somos</p>
+      <h2 class="fade-up">Presidentes y equipo</h2>
+      <p class="seccion-intro fade-up">Los estudiantes que han dado vida a El Aguilucho este año.</p>
+      <hr class="regla" />
+      <div id="render-presidentes" class="grid-presidentes"></div>
+
+      <div class="equipo-encabezado fade-up">
+        <h3>Equipo</h3>
+        <p>Los estudiantes que hacen posible cada edición.</p>
+        <hr class="regla" />
+      </div>
+      <div id="render-equipo" class="grid-equipo"></div>
+    </div>
+  </section>
+
+
+  <!-- ══ CONTACTO ════════════════════════════════════════════ -->
+  <section id="contacto" class="seccion-oscura">
+    <div class="contenedor">
+      <p class="etiqueta-seccion fade-up">Escríbenos</p>
+      <h2 class="fade-up">Contáctanos</h2>
+      <p class="seccion-intro fade-up">
+        ¿Quieres colaborar, enviar un artículo o simplemente saludarnos?
+        Estamos en las redes sociales y en los pasillos del Gimnasio Moderno.
+      </p>
+      <hr class="regla" />
+      <div class="grid-contacto">
+        <div class="contacto-bloque fade-up">
+          <h3>Redes sociales</h3>
+          <a id="contacto-instagram-link" href="#" target="_blank" rel="noopener noreferrer" class="contacto-instagram"></a>
+          <p>
+            Síguenos en Instagram para contenido exclusivo, detrás de cámaras
+            y las novedades de cada edición.
+          </p>
+        </div>
+        <div class="contacto-bloque fade-up" data-delay="1">
+          <h3>Encuéntranos</h3>
+          <address>
+            <p>
+              Gimnasio Moderno<br>
+              <span id="contacto-direccion"></span>
+            </p>
+          </address>
+          <p style="margin-top:1rem;">
+            <a id="contacto-email-link" href="#" class="contacto-email-link"></a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══ PIE ═════════════════════════════════════════════════ -->
+  <footer id="pie" class="seccion-oscura">
+    <div class="pie-grid">
+      <div class="pie-columna">
+        <p>
+          <strong class="pie-logo-nombre">El Aguilucho</strong>
+          La revista estudiantil más antigua de América Latina.
+          Fundada en 1927 en el Gimnasio Moderno de Bogotá, Colombia.
+        </p>
+      </div>
+      <div class="pie-columna">
+        <h4>Gimnasio Moderno</h4>
+        <ul>
+          <li><a href="https://www.gimnasiomoderno.edu.co" target="_blank" rel="noopener">Sitio oficial</a></li>
+          <li><a href="https://gimnasiomoderno.edu.co/gimnasio/historia/historia-ilustrada-1914-1923/" target="_blank" rel="noopener">Historia del colegio</a></li>
+        </ul>
+      </div>
+      <div class="pie-columna">
+        <h4>Recursos</h4>
+        <ul>
+          <li><a href="#revistas">Archivo de ediciones</a></li>
+          <li><a href="#la-pluma">La Pluma</a></li>
+        </ul>
+      </div>
+      <div class="pie-columna">
+        <h4>Dirección</h4>
+        <p>
+          Cra. 9ª #74-99<br>Bogotá, Colombia<br><br>
+          <a id="pie-email" href="#"></a>
+        </p>
+      </div>
+    </div>
+    <div class="pie-bottom">
+      <p id="pie-copyright"></p>
+      <div class="pie-redes">
+        <a id="pie-instagram" href="#" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ══ JAVASCRIPT ══════════════════════════════════════════ -->
+  <script>
+  (function () {
+    'use strict';
+
+    const menosMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    // ── Utilidades ───────────────────────────────────────────
+    function fisherYates(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function agruparPorDecada(arr) {
+      const mapa = {};
+      arr.forEach(ed => {
+        const dec = Math.floor(parseInt(ed.anio, 10) / 10) * 10;
+        const key = dec + 's';
+        if (!mapa[key]) mapa[key] = [];
+        mapa[key].push(ed);
+      });
+      return mapa;
+    }
+
+    // ── Render: Edición actual ────────────────────────────────
+    function renderEdicionActual() {
+      const e = EDICION_ACTUAL;
+      document.getElementById('render-edicion-actual').innerHTML = `
+        <div class="edicion-portada-col seccion-oscura fade-up">
+          <div class="edicion-portada-marco">
+            <a href="${e.linkCompra}" target="_blank" rel="noopener noreferrer" aria-label="Adquirir ${e.numero} de El Aguilucho">
+              <img src="${e.portada}"
+                   alt="Portada ${e.numero} de El Aguilucho"
+                   loading="eager" fetchpriority="high"
+                   onerror="this.onerror=null; this.style.aspectRatio='3/4'; this.style.background='#1c1c1c'; this.removeAttribute('src')" />
+            </a>
+            <span class="edicion-portada-sello">Edición actual</span>
+          </div>
+        </div>
+        <div class="edicion-info-col fade-up" data-delay="1">
+          <div class="edicion-info-inner">
+            <p class="etiqueta-seccion">Disponible ahora</p>
+            <h2>${e.numero}</h2>
+            <hr class="regla" style="margin:1.25rem 0 1.75rem;" />
+            <p class="edicion-intro">${e.intro}</p>
+            <p class="edicion-subtexto">${e.subtexto}</p>
+            <div class="edicion-precio-bloque">
+              <div>
+                <span class="edicion-precio-label">Precio</span>
+                <span class="edicion-precio">${e.precio}</span>
+              </div>
+              <a href="${e.linkCompra}" target="_blank" rel="noopener noreferrer" class="btn-comprar">
+                Adquirir revista
+              </a>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    // ── Render: Historia ─────────────────────────────────────
+    function renderHistoria() {
+      const h = HISTORIA;
+      const parrafosHTML = h.parrafos.map(p => `<p>${p}</p>`).join('');
+
+      document.getElementById('render-historia').innerHTML = `
+        <div class="historia-texto fade-up">
+          <p class="etiqueta-seccion">Nuestra historia</p>
+          <h2>El Aguilucho</h2>
+          <hr class="regla" />
+          ${parrafosHTML}
+          <blockquote>
+            <p>${h.cita}</p>
+            <footer><cite>— ${h.citaAutor}</cite></footer>
+          </blockquote>
+        </div>
+        <figure class="historia-imagen fade-up" data-delay="1">
+          <img
+            src="${h.imagen}"
+            alt="${h.imagenAlt}"
+            loading="lazy" decoding="async"
+            onerror="this.onerror=null; this.style.aspectRatio='3/4'; this.style.background='var(--gris-fondo)'; this.removeAttribute('src')"
+          />
+          <figcaption>${h.pieFoto}</figcaption>
+        </figure>`;
+    }
+
+    // ── Render: Anuncios ──────────────────────────────────────
+    // La sección nace oculta y solo aparece si alguna imagen carga:
+    // sin anuncios no queda una franja vacía entre secciones.
+    function renderAnuncios() {
+      const seccion = document.getElementById('anuncios');
+      const cont    = document.getElementById('render-anuncios');
+      if (!ANUNCIOS || ANUNCIOS.length === 0) return;
+
+      cont.innerHTML = ANUNCIOS.map(a => {
+        const tag  = a.link ? 'a' : 'div';
+        const href = a.link ? `href="${a.link}" target="_blank" rel="noopener noreferrer"` : '';
+        return `<${tag} class="anuncio-item" ${href}>
+          <img src="${a.imagen}" alt="${a.alt}" class="anuncio-imagen" loading="lazy" decoding="async" />
+        </${tag}>`;
+      }).join('');
+
+      let vivos = ANUNCIOS.length;
+      cont.querySelectorAll('.anuncio-imagen').forEach(img => {
+        const mostrar = () => { seccion.hidden = false; };
+        const fallar  = () => {
+          img.closest('.anuncio-item').remove();
+          if (--vivos <= 0) seccion.hidden = true;
+        };
+        if (img.complete) { img.naturalWidth ? mostrar() : fallar(); }
+        else { img.addEventListener('load', mostrar, { once: true });
+               img.addEventListener('error', fallar, { once: true }); }
+      });
+    }
+
+    // ── Render: La Pluma ──────────────────────────────────────
+    function renderLaPluma() {
+      const plumas = LA_PLUMA;
+      const cont   = document.getElementById('render-la-pluma');
+      if (!plumas || plumas.length === 0) {
+        cont.innerHTML = '<p class="seccion-intro">Próximamente.</p>';
+        return;
+      }
+
+      const [primera, ...resto] = plumas;
+
+      const subt = document.getElementById('pluma-intro-subtitulo');
+      if (subt) subt.textContent = PLUMA_INFO.subtitulo;
+
+      const destacada = `
+        <div class="pluma-destacada fade-up">
+          <div class="pluma-numero-grande"><span>${primera.numero}</span></div>
+          <div class="pluma-destacada-texto">
+            <p class="pluma-edicion-label">La Pluma · Edición ${primera.numero}</p>
+            <h3 class="pluma-titulo">${PLUMA_INFO.destacadoEdicion}</h3>
+            <a href="${primera.link}" target="_blank" rel="noopener noreferrer" class="btn-leer-pluma">
+              Leer edición ${primera.numero} — ${primera.mes}
+            </a>
+          </div>
+        </div>`;
+
+      function cardHTML(p, i) {
+        return `
+          <div class="pluma-card fade-up" data-delay="${Math.min(i + 1, 3)}">
+            <div class="pluma-card-num">${p.numero}</div>
+            <div class="pluma-card-mes">${p.mes}</div>
+            <a href="${p.link}" target="_blank" rel="noopener noreferrer" class="btn-leer-pluma">Leer</a>
+          </div>`;
+      }
+
+      let gridAnterior = '';
+      if (resto.length > 0) {
+        // Se muestran 3: exactamente una fila completa de la rejilla.
+        const visibles = resto.slice(0, 3);
+        const ocultas  = resto.slice(3);
+
+        const botonVerTodas = ocultas.length > 0
+          ? `<button id="btn-ver-todas-pluma" class="btn-ver-todas" aria-expanded="false" aria-controls="pluma-ocultas">
+               Ver todas las ediciones (${resto.length})
+             </button>`
+          : '';
+
+        gridAnterior = `
+          <div class="pluma-grid">${visibles.map(cardHTML).join('')}</div>
+          <div class="pluma-grid pluma-ocultas" id="pluma-ocultas" style="margin-top:1.5rem;">${ocultas.map(cardHTML).join('')}</div>
+          ${botonVerTodas}`;
+      }
+
+      cont.innerHTML = destacada + gridAnterior;
+
+      const btn = document.getElementById('btn-ver-todas-pluma');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          const ocultas = document.getElementById('pluma-ocultas');
+          const abierto = ocultas.classList.toggle('visible-grid');
+          btn.setAttribute('aria-expanded', String(abierto));
+          btn.textContent = abierto ? 'Ver menos' : `Ver todas las ediciones (${plumas.length - 1})`;
+          if (abierto) {
+            ocultas.querySelectorAll('.fade-up').forEach((el, i) => {
+              el.style.transitionDelay = Math.min(i, 6) * 45 + 'ms';
+              el.classList.add('visible');
+            });
+          }
+        });
+      }
+    }
+
+    // ── Render: Archivo + filtro por décadas ─────────────────
+    const porDecada = agruparPorDecada(ARCHIVO);
+    let tokenRender = 0;   // evita que dos clics rápidos se pisen
+
+    function tarjetaHTML(ed) {
+      return `
+        <div class="tarjeta-edicion">
+          <span class="tarjeta-edicion-numero">${ed.numero}</span>
+          <span class="tarjeta-edicion-anio">${ed.anio}</span>
+          <div class="tarjeta-edicion-sep"></div>
+          <a href="${ed.link}" target="_blank" rel="noopener noreferrer"
+             class="tarjeta-edicion-btn" aria-label="Leer edición ${ed.numero} de ${ed.anio}">Leer</a>
+        </div>`;
+    }
+
+    function mostrarEdiciones(lista) {
+      const grid    = document.getElementById('grid-aleatorio');
+      const miToken = ++tokenRender;
+      const previas = grid.querySelectorAll('.tarjeta-edicion');
+
+      const pintar = () => {
+        if (miToken !== tokenRender) return;   // llegó un clic más nuevo
+        const seleccion = fisherYates(lista).slice(0, 5);
+        grid.innerHTML = seleccion.map(tarjetaHTML).join('');
+        // Sin celdas vacías: tantas columnas como tarjetas haya.
+        grid.style.setProperty('--cols', Math.max(seleccion.length, 1));
+        void grid.offsetHeight;   // fuerza el reflujo para que la transición arranque
+        grid.querySelectorAll('.tarjeta-edicion').forEach((el, i) => {
+          el.style.transitionDelay = (menosMovimiento.matches ? 0 : i * 60) + 'ms';
+          el.classList.add('dentro');
+        });
+      };
+
+      if (previas.length) {
+        previas.forEach(el => el.classList.add('saliendo'));
+        setTimeout(pintar, menosMovimiento.matches ? 0 : 160);
+      } else {
+        pintar();
+      }
+    }
+
+    function initArchivo() {
+      const filtro  = document.getElementById('decadas-filtro');
+      const decadas = Object.keys(porDecada).sort();
+
+      const btnDesc = document.createElement('button');
+      btnDesc.className = 'decada-btn activo';
+      btnDesc.textContent = 'Descubrir';
+      btnDesc.dataset.decada = 'aleatorio';
+      btnDesc.setAttribute('aria-pressed', 'true');
+      filtro.appendChild(btnDesc);
+
+      decadas.forEach(dec => {
+        const btn = document.createElement('button');
+        btn.className = 'decada-btn';
+        btn.textContent = dec;
+        btn.dataset.decada = dec;
+        btn.setAttribute('aria-pressed', 'false');
+        filtro.appendChild(btn);
+      });
+
+      filtro.addEventListener('click', e => {
+        const btn = e.target.closest('.decada-btn');
+        if (!btn) return;
+        filtro.querySelectorAll('.decada-btn').forEach(b => {
+          b.classList.remove('activo');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        btn.classList.add('activo');
+        btn.setAttribute('aria-pressed', 'true');
+        const dec = btn.dataset.decada;
+        mostrarEdiciones(dec === 'aleatorio' ? ARCHIVO : porDecada[dec]);
+      });
+
+      mostrarEdiciones(ARCHIVO);
+
+      document.getElementById('banner-total-ediciones').textContent =
+        `${REVISTA.totalEdiciones} ediciones desde ${REVISTA.fundacion}`;
+    }
+
+    // ── Render: Presidentes ───────────────────────────────────
+    function renderPresidentes() {
+      const html = PRESIDENTES.map((p, i) => {
+        const pendiente = /pendiente/i.test(p.nombre);
+        const nombre    = pendiente ? 'Por designar' : p.nombre;
+        return `
+        <div class="tarjeta-presidente fade-up" data-delay="${Math.min(i + 1, 5)}">
+          <div class="presidente-retrato">
+            <img src="${p.foto}" alt="Retrato de ${nombre}" loading="lazy" decoding="async"
+                 onerror="this.onerror=null; var m=this.parentNode; this.remove(); m.classList.add('vacante')" />
+          </div>
+          <p class="presidente-nombre${pendiente ? ' pendiente' : ''}">${nombre}</p>
+          <p class="presidente-cargo">${p.cargo}</p>
+          <p class="presidente-periodo">${p.periodo}</p>
+        </div>`;
+      }).join('');
+      document.getElementById('render-presidentes').innerHTML = html;
+    }
+
+    // ── Render: Equipo (mancheta agrupada por comité) ─────────
+    function renderEquipo() {
+      const grupos = [];
+      EQUIPO.forEach(m => {
+        let g = grupos.find(x => x.cargo === m.cargo);
+        if (!g) { g = { cargo: m.cargo, nombres: [] }; grupos.push(g); }
+        g.nombres.push(m.nombre);
+      });
+
+      document.getElementById('render-equipo').innerHTML = grupos.map((g, i) => `
+        <div class="equipo-comite fade-up" data-delay="${Math.min(i + 1, 4)}">
+          <h4>${g.cargo}</h4>
+          <ul>${g.nombres.map(n => `<li>${n}</li>`).join('')}</ul>
+        </div>`).join('');
+    }
+
+    // ── Render: Contacto + Pie ────────────────────────────────
+    function renderContactoFooter() {
+      const r = REVISTA;
+
+      const bannerArchivo = document.getElementById('banner-archivo-link');
+      if (bannerArchivo) bannerArchivo.href = r.archivoUrl;
+
+      document.getElementById('contacto-instagram-link').href        = r.instagramUrl;
+      document.getElementById('contacto-instagram-link').textContent = r.instagram;
+      document.getElementById('contacto-direccion').textContent      = r.direccion;
+
+      const emailLink = document.getElementById('contacto-email-link');
+      emailLink.href        = `mailto:${r.email}`;
+      emailLink.textContent = r.email;
+
+      const pieEmail = document.getElementById('pie-email');
+      pieEmail.href        = `mailto:${r.email}`;
+      pieEmail.textContent = r.email;
+      document.getElementById('pie-instagram').href        = r.instagramUrl;
+      document.getElementById('pie-copyright').textContent = r.copyright;
+    }
+
+    // ── Revelado al scroll ────────────────────────────────────
+    function initScrollAnimations() {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
+
+      document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    }
+
+    // ── Contadores ────────────────────────────────────────────
+    function animarContador(el) {
+      const objetivo = parseInt(el.dataset.target, 10);
+      if (menosMovimiento.matches) { el.textContent = objetivo; return; }
+      const dur    = 1400;
+      const inicio = performance.now();
+      function paso(ahora) {
+        const t    = Math.min((ahora - inicio) / dur, 1);
+        const ease = 1 - Math.pow(1 - t, 4);
+        el.textContent = Math.round(ease * objetivo);
+        if (t < 1) requestAnimationFrame(paso);
+      }
+      requestAnimationFrame(paso);
+    }
+
+    function initContadores() {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animarContador(entry.target);
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      document.querySelectorAll('.stat-numero[data-target]').forEach(c => {
+        c.textContent = '0';
+        obs.observe(c);
+      });
+    }
+
+    // ── Encabezado: transparente sobre el hero, material después ──
+    function initHeader() {
+      const header = document.getElementById('encabezado');
+      const hero   = document.getElementById('inicio');
+      const nav    = document.getElementById('navMovil');
+      const btn    = document.getElementById('btnMenu');
+
+      const sincronizar = () => {
+        const limite = hero.offsetHeight - header.offsetHeight;
+        const sobre  = window.scrollY < limite && !nav.classList.contains('abierto');
+        header.classList.toggle('sobre-hero', sobre);
+      };
+      window.addEventListener('scroll', sincronizar, { passive: true });
+      window.addEventListener('resize', sincronizar, { passive: true });
+      btn.addEventListener('click', () => requestAnimationFrame(sincronizar));
+      sincronizar();
+    }
+
+    // ── Link activo en la navegación ──────────────────────────
+    function initNavActiva() {
+      const secciones = document.querySelectorAll('section[id]');
+      const links     = document.querySelectorAll('.nav-principal a');
+      const header    = document.getElementById('encabezado');
+
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            links.forEach(link => {
+              link.classList.toggle('activo', link.getAttribute('href') === '#' + id);
+            });
+          }
+        });
+      }, { rootMargin: `-${header.offsetHeight + 10}px 0px -60% 0px` });
+
+      secciones.forEach(s => obs.observe(s));
+    }
+
+    // ── Menú móvil ───────────────────────────────────────────
+    function initMenu() {
+      const btn = document.getElementById('btnMenu');
+      const nav = document.getElementById('navMovil');
+      btn.addEventListener('click', () => {
+        const abierto = nav.classList.toggle('abierto');
+        btn.setAttribute('aria-expanded', String(abierto));
+        btn.setAttribute('aria-label', abierto ? 'Cerrar menú' : 'Abrir menú');
+      });
+      document.querySelectorAll('.nav-link-movil').forEach(link => {
+        link.addEventListener('click', () => {
+          nav.classList.remove('abierto');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.setAttribute('aria-label', 'Abrir menú');
+        });
+      });
+    }
+
+    // ── Scroll suave con compensación del encabezado ─────────
+    function initSmoothScroll() {
+      document.addEventListener('click', e => {
+        const a = e.target.closest('a[href^="#"]');
+        if (!a) return;
+        const id = a.getAttribute('href');
+        if (id === '#') return;
+        const destino = document.querySelector(id);
+        if (!destino) return;
+        e.preventDefault();
+        const offset = document.getElementById('encabezado').offsetHeight;
+        const top    = destino.getBoundingClientRect().top + window.scrollY - offset + 1;
+        window.scrollTo({
+          top,
+          behavior: menosMovimiento.matches ? 'auto' : 'smooth',
+        });
+      });
+    }
+
+    // ── Arranque ──────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      renderEdicionActual();
+      renderAnuncios();
+      renderHistoria();
+      renderLaPluma();
+      renderPresidentes();
+      renderEquipo();
+      renderContactoFooter();
+      initArchivo();
+
+      // Sin requestAnimationFrame: en una pestaña en segundo plano rAF
+      // no corre, y el encabezado y los reveals quedarían sin inicializar.
+      initScrollAnimations();
+      initContadores();
+      initHeader();
+      initNavActiva();
+      initMenu();
+      initSmoothScroll();
+    });
+
+  })();
+  </script>
+
+</body>
+</html>
